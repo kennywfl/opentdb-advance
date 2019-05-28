@@ -5,7 +5,7 @@ import com.sample.test.lib.Constants
 import com.sample.test.lib.datasource.DataManager
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -17,14 +17,12 @@ class QuickQuizPresenter @Inject constructor(
     view: QuickQuizView
 ) : BasePresenter<QuickQuizView>() {
 
-    private lateinit var timer: Disposable
-
     init {
         bindView(view)
     }
 
     fun startTimer() {
-        timer = Observable.intervalRange(1, Constants.COUNT_DOWN_TIMER, 0, 1, TimeUnit.SECONDS)
+        subscription += Observable.intervalRange(1, Constants.COUNT_DOWN_TIMER, 0, 1, TimeUnit.SECONDS)
             .delay(1, TimeUnit.SECONDS)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy({
