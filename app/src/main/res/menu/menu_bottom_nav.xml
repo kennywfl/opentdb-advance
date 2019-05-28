@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/main_fragment"
+            android:icon="@drawable/ic_home"
+            android:title="@string/browse"/>
+    <item
+            android:id="@+id/catalog_fragment"
+            android:icon="@drawable/ic_listing"
+            android:title="@string/catalog"/>
+    <item
+            android:id="@+id/quiz_fragment"
+            android:icon="@drawable/ic_forum"
+            android:title="@string/quiz"/>
+</menu>

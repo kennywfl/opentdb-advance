@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_16dp"
+            app:cardElevation="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_8dp">
+
+            <TextView
+                    android:id="@+id/tv_message"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/padding_16dp"
+                    android:text="@string/configure_your_option_to_get_started"
+                    android:textColor="@android:color/primary_text_light_nodisable"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                    android:id="@+id/lbl_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/padding_16dp"
+                    android:paddingTop="@dimen/padding_8dp"
+                    android:paddingEnd="@dimen/padding_16dp"
+                    android:paddingBottom="@dimen/padding_8dp"
+                    android:text="@string/select_category"
+                    android:textColor="@android:color/primary_text_light_nodisable"
+                    app:layout_constraintStart_toStartOf="@id/tv_message"
+                    app:layout_constraintTop_toBottomOf="@id/tv_message"/>
+
+            <Spinner
+                    android:id="@+id/sp_category"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/padding_16dp"
+                    android:paddingTop="@dimen/padding_8dp"
+                    android:paddingEnd="@dimen/padding_16dp"
+                    android:paddingBottom="@dimen/padding_8dp"
+                    app:layout_constraintStart_toStartOf="@id/lbl_category"
+                    app:layout_constraintTop_toBottomOf="@id/lbl_category"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <Button
+            android:id="@+id/btn_next"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next"
+            app:layout_constraintEnd_toEndOf="@id/cv_title"
+            app:layout_constraintTop_toBottomOf="@id/cv_title"/>
+
+    <ProgressBar
+            android:id="@+id/pb_loading"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/btn_next"
+            app:layout_constraintTop_toTopOf="@id/btn_next"
+            app:layout_constraintBottom_toBottomOf="@id/btn_next"/>
+
+    <androidx.cardview.widget.CardView
+            android:id="@+id/cv_result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/padding_16dp"
+            android:visibility="gone"
+            app:cardElevation="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btn_next">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <TextView
+                    android:id="@+id/tv_result_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/padding_16dp"
+                    android:paddingEnd="@dimen/padding_16dp"
+                    android:paddingTop="@dimen/padding_16dp"
+                    android:paddingBottom="@dimen/padding_8dp"
+                    android:text="@string/quiz_result_label"
+                    android:textColor="@color/textPrimary"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
+            <TextView
+                    android:id="@+id/tv_time_taken"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/padding_16dp"
+                    android:paddingEnd="@dimen/padding_16dp"
+                    android:paddingTop="@dimen/padding_8dp"
+                    android:paddingBottom="@dimen/padding_8dp"
+                    android:textColor="@color/textPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/tv_result_title"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="@string/remaining_time"/>
+
+            <TextView
+                    android:id="@+id/tv_correct_count"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="@dimen/padding_16dp"
+                    android:paddingEnd="@dimen/padding_16dp"
+                    android:paddingTop="@dimen/padding_8dp"
+                    android:paddingBottom="@dimen/padding_16dp"
+                    android:textColor="@color/textPrimary"
+                    app:layout_constraintTop_toBottomOf="@id/tv_time_taken"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    tools:text="@string/correct_answer_count"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">Open Trivia DB</string>
+    <string name="browse">Browse</string>
+    <string name="quiz">Quiz</string>
+    <string name="catalog">Catalog</string>
+    <string name="setting">Settings</string>
+    <string name="catagories">Categories</string>
+    <string name="select_a_category">Select a category</string>
+    <string name="easy">Easy</string>
+    <string name="easy_count">Easy: %1$d</string>
+    <string name="medium">Medium</string>
+    <string name="medium_count">Medium: %1$d</string>
+    <string name="hard">Hard</string>
+    <string name="hard_count">Hard: %1$d</string>
+    <string name="multiple_choice">Multiple Choice</string>
+    <string name="true_false">True / False</string>
+    <string name="no_record">No Records.</string>
+    <string name="launcher_icon">Launcher Icon</string>
+    <string name="total">Total: </string>
+    <string name="configure_your_option_to_get_started">Choose the category you want to start the quiz or leave it empty for question from all categories. \nThere are total of <strong>Ten</strong> questions. \nTime limit is <strong>One</strong> minutes.</string>
+    <string name="next">Next</string>
+    <string name="select_category">Select category:</string>
+    <string name="select_difficulty">Select difficulty:</string>
+    <string name="select_type">Select type:</string>
+    <string name="noop">noop</string>
+    <string name="close">Close</string>
+    <string name="one_minute">01:00</string>
+    <string name="question_count">%1$d/%2$d</string>
+    <string name="question">Question:</string>
+    <string name="quiz_result_label">Below are your quiz result. Click here to view more details on each questions.</string>
+    <string name="remaining_time">Time remaining: %1$s</string>
+    <string name="correct_answer_count">Total correct answered: %1$d out of %2$d</string>
+    <string name="answer">Answer:</string>
+</resources>

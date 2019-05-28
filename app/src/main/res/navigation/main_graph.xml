@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/main_graph"
+            app:startDestination="@id/main_fragment">
+
+    <fragment
+            android:id="@+id/main_fragment"
+            android:name="com.sample.test.fragment.MainFragment"
+            android:label="@string/app_name"
+            tools:layout="@layout/fragment_main"/>
+
+    <fragment
+            android:id="@+id/catalog_fragment"
+            android:name="com.sample.test.fragment.CatalogFragment"
+            android:label="@string/catagories"
+            tools:layout="@layout/fragment_catalog"/>
+
+    <fragment
+            android:id="@+id/quiz_fragment"
+            android:name="com.sample.test.fragment.QuizFragment"
+            android:label="@string/quiz"
+            tools:layout="@layout/fragment_quiz">
+        <action
+                android:id="@+id/action_quiz_fragment_to_quick_quiz_dialog"
+                app:destination="@id/quick_quiz_dialog"/>
+        <action
+                android:id="@+id/action_quiz_fragment_to_result_dialog"
+                app:destination="@id/result_dialog"/>
+    </fragment>
+    <activity
+            android:id="@+id/setting_activity"
+            android:name="com.sample.test.activity.SettingActivity"
+            android:label="Settings"/>
+    <dialog
+            android:id="@+id/quick_quiz_dialog"
+            android:name="com.sample.test.dialogfragment.QuickQuizDialogFragment"
+            tools:layout="@layout/fragment_questions"/>
+    <dialog
+            android:id="@+id/result_dialog"
+            android:name="com.sample.test.dialogfragment.ResultDialogFragment"
+            tools:layout="@layout/fragment_result"/>
+</navigation>

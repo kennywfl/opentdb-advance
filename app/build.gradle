@@ -1,0 +1,57 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply plugin: 'kotlin-kapt'
+
+apply plugin: "androidx.navigation.safeargs.kotlin"
+
+apply from: '../dependencies.gradle'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.sample.test"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+        }
+        release {
+            debuggable false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(":lib")
+    implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraint}"
+    implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
+    implementation "androidx.cardview:cardview:${versions.androidx.cardview}"
+    implementation "androidx.preference:preference:${versions.androidx.preference}"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${versions.androidx.swiperefreshlayout}"
+    implementation "androidx.lifecycle:lifecycle-extensions:${versions.androidx.viewmodel}"
+    implementation "androidx.paging:paging-runtime:${versions.androidx.paging}"
+    implementation "androidx.paging:paging-rxjava2:${versions.androidx.paging}"
+    implementation "androidx.navigation:navigation-fragment-ktx:${versions.androidx.navigation}"
+    implementation "androidx.navigation:navigation-ui-ktx:${versions.androidx.navigation}"
+    implementation "com.google.android.material:material:${versions.google.material}"
+    implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rx.binding}"
+    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
+    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
+    testImplementation "junit:junit:${versions.test.junit}"
+    androidTestImplementation "androidx.test:runner:${versions.test.androidtestrunner}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.test.espresso}"
+}
