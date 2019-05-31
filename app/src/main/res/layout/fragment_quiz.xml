@@ -27,7 +27,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_16dp"
                     android:text="@string/configure_your_option_to_get_started"
-                    android:textColor="@android:color/primary_text_light_nodisable"
+                    android:textColor="@color/textPrimary"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +42,7 @@
                     android:paddingEnd="@dimen/padding_16dp"
                     android:paddingBottom="@dimen/padding_8dp"
                     android:text="@string/select_category"
-                    android:textColor="@android:color/primary_text_light_nodisable"
+                    android:textColor="@color/textPrimary"
                     app:layout_constraintStart_toStartOf="@id/tv_message"
                     app:layout_constraintTop_toBottomOf="@id/tv_message"/>
 
@@ -63,7 +63,6 @@
 
     <Button
             android:id="@+id/btn_next"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/next"

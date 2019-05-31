@@ -11,7 +11,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_close"
-            android:tint="?colorPrimary"
+            android:tint="?colorAccent"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:padding="@dimen/padding_16dp"
             android:contentDescription="@string/close"
@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:padding="@dimen/padding_16dp"
-            android:textColor="@android:color/primary_text_light_nodisable"
+            android:textColor="@color/textPrimary"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/iv_close"
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/padding_16dp"
                     android:text="@string/question"
-                    android:textColor="@android:color/primary_text_light_nodisable"
+                    android:textColor="@color/textPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="@string/question"/>
@@ -94,6 +94,7 @@
                     android:paddingTop="@dimen/padding_8dp"
                     android:paddingEnd="@dimen/padding_8dp"
                     android:paddingBottom="@dimen/padding_8dp"
+                    android:textColor="@color/textPrimary"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/lbl_question"
                     tools:text="@tools:sample/lorem"/>
@@ -124,7 +125,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:padding="@dimen/padding_8dp"
-                android:textColor="@android:color/primary_text_light_nodisable"
+                android:textColor="@color/textPrimary"
                 tools:text="@tools:sample/lorem"/>
 
     </androidx.cardview.widget.CardView>
@@ -151,7 +152,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:padding="@dimen/padding_8dp"
-                android:textColor="@android:color/primary_text_light_nodisable"
+                android:textColor="@color/textPrimary"
                 tools:text="@tools:sample/lorem"/>
 
     </androidx.cardview.widget.CardView>
@@ -178,7 +179,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:padding="@dimen/padding_8dp"
-                android:textColor="@android:color/primary_text_light_nodisable"
+                android:textColor="@color/textPrimary"
                 tools:text="@tools:sample/lorem"/>
 
     </androidx.cardview.widget.CardView>
@@ -205,7 +206,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:padding="@dimen/padding_8dp"
-                android:textColor="@android:color/primary_text_light_nodisable"
+                android:textColor="@color/textPrimary"
                 tools:text="@tools:sample/lorem"/>
 
     </androidx.cardview.widget.CardView>
