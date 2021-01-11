@@ -7,19 +7,19 @@
 
     <fragment
             android:id="@+id/main_fragment"
-            android:name="com.sample.test.fragment.MainFragment"
+            android:name="com.opentrivia.app.fragment.MainFragment"
             android:label="@string/app_name"
             tools:layout="@layout/fragment_main"/>
 
     <fragment
             android:id="@+id/catalog_fragment"
-            android:name="com.sample.test.fragment.CatalogFragment"
+            android:name="com.opentrivia.app.fragment.CatalogFragment"
             android:label="@string/catagories"
             tools:layout="@layout/fragment_catalog"/>
 
     <fragment
             android:id="@+id/quiz_fragment"
-            android:name="com.sample.test.fragment.QuizFragment"
+            android:name="com.opentrivia.app.fragment.QuizFragment"
             android:label="@string/quiz"
             tools:layout="@layout/fragment_quiz">
         <action
@@ -31,14 +31,14 @@
     </fragment>
     <activity
             android:id="@+id/setting_activity"
-            android:name="com.sample.test.activity.SettingActivity"
+            android:name="com.opentrivia.app.activity.SettingActivity"
             android:label="Settings"/>
     <dialog
             android:id="@+id/quick_quiz_dialog"
-            android:name="com.sample.test.dialogfragment.QuickQuizDialogFragment"
+            android:name="com.opentrivia.app.dialogfragment.QuickQuizDialogFragment"
             tools:layout="@layout/fragment_questions"/>
     <dialog
             android:id="@+id/result_dialog"
-            android:name="com.sample.test.dialogfragment.ResultDialogFragment"
+            android:name="com.opentrivia.app.dialogfragment.ResultDialogFragment"
             tools:layout="@layout/fragment_result"/>
 </navigation>

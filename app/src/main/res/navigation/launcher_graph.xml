@@ -8,12 +8,12 @@
 
     <fragment
             android:id="@+id/launcher"
-            android:name="com.sample.test.fragment.LauncherFragment"
+            android:name="com.opentrivia.app.fragment.LauncherFragment"
             tools:layout="@layout/fragment_launcher"
             />
     <activity
             android:id="@+id/main_activity"
-            android:name="com.sample.test.activity.MainActivity"
+            android:name="com.opentrivia.app.activity.MainActivity"
             tools:layout="@layout/activity_main"
             />
     <action

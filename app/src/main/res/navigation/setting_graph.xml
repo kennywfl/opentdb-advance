@@ -6,6 +6,6 @@
 
     <fragment
             android:id="@+id/setting_fragment"
-            android:name="com.sample.test.fragment.SettingFragment"
+            android:name="com.opentrivia.app.fragment.SettingFragment"
             android:label="@string/setting"/>
 </navigation>
