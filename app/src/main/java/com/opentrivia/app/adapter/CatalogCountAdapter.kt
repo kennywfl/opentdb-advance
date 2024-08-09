@@ -2,21 +2,20 @@ package com.opentrivia.app.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.ViewCategoryCountBinding
 import com.opentrivia.app.lib.datasource.model.QuestionCount
-import kotlinx.android.synthetic.main.view_category_count.view.*
 
 
 class CatalogCountAdapter(val context: Context?, val data: MutableList<QuestionCount>) :
     RecyclerView.Adapter<CountHolder>() {
 
-    val inflater = LayoutInflater.from(context)
+    val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountHolder {
-        val view = inflater.inflate(R.layout.view_category_count, parent, false)
+        val view = ViewCategoryCountBinding.inflate(inflater, parent, false)
         return CountHolder(view)
     }
 
@@ -41,10 +40,10 @@ class CatalogCountAdapter(val context: Context?, val data: MutableList<QuestionC
     }
 }
 
-class CountHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvTotalCount = view.tv_total_count
-    val tvQuestion = view.tv_question
-    val tvEasyCount = view.tv_easy_count
-    val tvMediumCount = view.tv_medium_count
-    val tvHardCount = view.tv_hard_count
+class CountHolder(view: ViewCategoryCountBinding) : RecyclerView.ViewHolder(view.root) {
+    val tvTotalCount = view.tvTotalCount
+    val tvQuestion = view.tvQuestion
+    val tvEasyCount = view.tvEasyCount
+    val tvMediumCount = view.tvMediumCount
+    val tvHardCount = view.tvHardCount
 }

@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
 import timber.log.Timber
 
 

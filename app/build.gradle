@@ -2,8 +2,6 @@ apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
-apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 apply plugin: "androidx.navigation.safeargs.kotlin"
@@ -11,13 +9,18 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply from: '../dependencies.gradle'
 
 android {
-    compileSdkVersion 29
+    buildFeatures {
+        viewBinding true
+    }
+
+    compileSdk 34
+
     defaultConfig {
         applicationId "com.opentrivia.advance"
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 10
-        versionName "1.0"
+        minSdk 21
+        targetSdk 34
+        versionCode 11
+        versionName "1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -30,6 +33,14 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    flavorDimensions "app"
+    namespace "com.opentrivia.advance"
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }
 

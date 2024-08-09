@@ -10,15 +10,16 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.FragmentResultBinding
 import com.opentrivia.app.adapter.ResultAdapter
 import com.opentrivia.app.framework.model.QuizViewModel
-import kotlinx.android.synthetic.main.fragment_result.*
 
 
 class ResultDialogFragment : BaseDialogFragment() {
 
     private lateinit var quizViewModel: QuizViewModel
+    private lateinit var binding: FragmentResultBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,18 +30,19 @@ class ResultDialogFragment : BaseDialogFragment() {
         populateAnswerCorrectlyFlag()
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_result, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentResultBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        iv_close.setOnClickListener {
+        binding.ivClose.setOnClickListener {
             dismiss()
         }
         val adapter = ResultAdapter(context, quizViewModel.questionList)
-        rv_result.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        rv_result.adapter = adapter
+        binding.rvResult.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.rvResult.adapter = adapter
     }
 
     override fun onStart() {
@@ -54,7 +56,7 @@ class ResultDialogFragment : BaseDialogFragment() {
         }
     }
 
-    fun populateAnswerCorrectlyFlag() {
+    private fun populateAnswerCorrectlyFlag() {
         quizViewModel.answerMap.value?.forEach { key, value ->
             quizViewModel.questionList[key - 1].answerCorrectly = value
         }

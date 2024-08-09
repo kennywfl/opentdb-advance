@@ -10,14 +10,15 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.FragmentQuestionsBinding
 import com.opentrivia.app.extension.hide
 import com.opentrivia.app.extension.show
 import com.opentrivia.app.framework.model.QuizViewModel
 import com.opentrivia.app.framework.presenter.QuickQuizPresenter
 import com.opentrivia.app.framework.view.QuickQuizView
 import com.opentrivia.app.lib.Constants
-import kotlinx.android.synthetic.main.fragment_questions.*
+import java.util.Locale
 import javax.inject.Inject
 
 
@@ -29,6 +30,7 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
     private var count = 1
     private val buttonMap = SparseBooleanArray()
     private val answerMap = SparseBooleanArray()
+    private lateinit var binding: FragmentQuestionsBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,19 +40,20 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.NoTitleDialog)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_questions, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentQuestionsBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        iv_close.setOnClickListener {
+        binding.ivClose.setOnClickListener {
             dismiss()
         }
-        cv_option_1.setOnClickListener(this)
-        cv_option_2.setOnClickListener(this)
-        cv_option_3.setOnClickListener(this)
-        cv_option_4.setOnClickListener(this)
+        binding.cvOption1.setOnClickListener(this)
+        binding.cvOption2.setOnClickListener(this)
+        binding.cvOption3.setOnClickListener(this)
+        binding.cvOption4.setOnClickListener(this)
         populateQuestionContent()
         presenter.startTimer()
     }
@@ -75,25 +78,25 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
     override fun onTimeCountDown(remainingTime: Long) {
         if (remainingTime > 5) {
             context?.let {
-                tv_timer.setTextColor(ContextCompat.getColor(it, R.color.textPrimary))
+                binding.tvTimer.setTextColor(ContextCompat.getColor(it, R.color.textPrimary))
             }
         } else {
             context?.let {
-                tv_timer.setTextColor(ContextCompat.getColor(it, R.color.red))
+                binding.tvTimer.setTextColor(ContextCompat.getColor(it, R.color.red))
             }
             if (remainingTime != 0L) {
-                tv_timer.animate()
+                binding.tvTimer.animate()
                     .setDuration(400)
                     .alpha(0f)
                     .withEndAction {
-                        tv_timer.animate()
+                        binding.tvTimer.animate()
                             .alpha(1f)
                             .setDuration(400)
                     }
                     .start()
             }
         }
-        tv_timer.text = Constants.COUNT_DOWN_TEXT.format(remainingTime)
+        binding.tvTimer.text = Constants.COUNT_DOWN_TEXT.format(remainingTime)
     }
 
     override fun onCountDownFinished() {
@@ -104,7 +107,7 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
                 answerMap.put(currentSize + i, false)
             }
         }
-        quizViewModel.remainingTime = tv_timer.text.toString()
+        quizViewModel.remainingTime = binding.tvTimer.text.toString()
         quizViewModel.answerMap.postValue(answerMap)
         dismiss()
     }
@@ -114,7 +117,7 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
             val result = buttonMap[it.id]
             answerMap.put(count, result)
             if (count > Constants.QUIZ_SIZE - 1) {
-                quizViewModel.remainingTime = tv_timer.text.toString()
+                quizViewModel.remainingTime = binding.tvTimer.text.toString()
                 quizViewModel.answerMap.postValue(answerMap)
                 dismiss()
             } else {
@@ -125,43 +128,52 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
     }
 
     fun updateQuestionCount() {
-        tv_question_count.text = getString(R.string.question_count, count, quizViewModel.questionList.size)
+        binding.tvQuestionCount.text =
+            getString(R.string.question_count, count, quizViewModel.questionList.size)
     }
 
     fun populateQuestionContent() {
         buttonMap.clear()
         updateQuestionCount()
         val (_, question, difficulty, isMultiple, answers) = quizViewModel.questionList[count - 1]
-        tv_question.text = HtmlCompat.fromHtml(question, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding.tvQuestion.text = HtmlCompat.fromHtml(question, HtmlCompat.FROM_HTML_MODE_LEGACY)
         constructDifficulty(difficulty)
-        tv_option_1.text = HtmlCompat.fromHtml(answers[0].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding.tvOption1.text =
+            HtmlCompat.fromHtml(answers[0].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
         buttonMap.put(R.id.cv_option_1, answers[0].second)
-        tv_option_2.text = HtmlCompat.fromHtml(answers[1].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
+        binding.tvOption2.text =
+            HtmlCompat.fromHtml(answers[1].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
         buttonMap.put(R.id.cv_option_2, answers[1].second)
         if (isMultiple) {
-            tv_option_3.text = HtmlCompat.fromHtml(answers[2].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            binding.tvOption3.text =
+                HtmlCompat.fromHtml(answers[2].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
             buttonMap.put(R.id.cv_option_3, answers[2].second)
-            cv_option_3.show()
-            tv_option_4.text = HtmlCompat.fromHtml(answers[3].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
+            binding.cvOption3.show()
+            binding.tvOption4.text =
+                HtmlCompat.fromHtml(answers[3].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
             buttonMap.put(R.id.cv_option_4, answers[3].second)
-            cv_option_4.show()
+            binding.cvOption4.show()
         } else {
-            cv_option_3.hide()
-            cv_option_4.hide()
+            binding.cvOption3.hide()
+            binding.cvOption4.hide()
         }
     }
 
-    fun constructDifficulty(difficulty: String) {
-        tv_difficulty.text = difficulty.capitalize()
-        tv_difficulty.show()
+    private fun constructDifficulty(difficulty: String) {
+        binding.tvDifficulty.text = difficulty.replaceFirstChar {
+            if (it.isLowerCase()) it.titlecase(
+                Locale.getDefault()
+            ) else it.toString()
+        }
+        binding.tvDifficulty.show()
         if (Constants.Api.PARAM_EASY.equals(difficulty)) {
-            tv_difficulty.setChipBackgroundColorResource(R.color.green)
+            binding.tvDifficulty.setChipBackgroundColorResource(R.color.green)
         } else if (Constants.Api.PARAM_MEDIUM.equals(difficulty)) {
-            tv_difficulty.setChipBackgroundColorResource(R.color.orange)
+            binding.tvDifficulty.setChipBackgroundColorResource(R.color.orange)
         } else if (Constants.Api.PARAM_HARD.equals(difficulty)) {
-            tv_difficulty.setChipBackgroundColorResource(R.color.red)
+            binding.tvDifficulty.setChipBackgroundColorResource(R.color.red)
         } else {
-            tv_difficulty.hide()
+            binding.tvDifficulty.hide()
         }
     }
 

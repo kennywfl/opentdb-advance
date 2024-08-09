@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.FragmentCatalogBinding
 import com.opentrivia.app.adapter.CatalogCountAdapter
 import com.opentrivia.app.framework.presenter.CatalogPresenter
 import com.opentrivia.app.framework.view.CatalogView
 import com.opentrivia.app.lib.datasource.model.QuestionCount
-import kotlinx.android.synthetic.main.fragment_catalog.*
 import javax.inject.Inject
 
 
@@ -20,16 +20,18 @@ class CatalogFragment : BaseFragment(), CatalogView {
     @Inject
     lateinit var presenter: CatalogPresenter
     lateinit var adapter: CatalogCountAdapter
+    private lateinit var binding: FragmentCatalogBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_catalog, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentCatalogBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerAdapter()
-        srl_category_count.setOnRefreshListener {
-            srl_category_count.isRefreshing = true
+        binding.srlCategoryCount.setOnRefreshListener {
+            binding.srlCategoryCount.isRefreshing = true
             presenter.getCategoryCount()
         }
     }
@@ -42,7 +44,7 @@ class CatalogFragment : BaseFragment(), CatalogView {
     override fun onStart() {
         super.onStart()
         presenter.bindView(this)
-        srl_category_count.isRefreshing = true
+        binding.srlCategoryCount.isRefreshing = true
         presenter.getCategoryCount()
     }
 
@@ -53,12 +55,13 @@ class CatalogFragment : BaseFragment(), CatalogView {
 
     override fun onRetrieveCategoryCounts(questionCounts: MutableList<QuestionCount>) {
         adapter.submitList(questionCounts)
-        srl_category_count.isRefreshing = false
+        binding.srlCategoryCount.isRefreshing = false
     }
 
     fun setupRecyclerAdapter() {
         adapter = CatalogCountAdapter(context, mutableListOf())
-        rv_category_count.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        rv_category_count.adapter = adapter
+        binding.rvCategoryCount.layoutManager =
+            LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+        binding.rvCategoryCount.adapter = adapter
     }
 }

@@ -1,16 +1,18 @@
 package com.opentrivia.app.activity
 
 import android.os.Bundle
-import com.opentrivia.app.R
-import kotlinx.android.synthetic.main.activity_setting.*
+import com.opentrivia.advance.databinding.ActivitySettingBinding
 
 
 class SettingActivity : BaseActivity() {
 
+    private lateinit var binding: ActivitySettingBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
-        setSupportActionBar(toolbar)
+        binding = ActivitySettingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
         }

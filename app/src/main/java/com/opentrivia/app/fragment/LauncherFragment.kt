@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.FragmentLauncherBinding
 import com.opentrivia.app.extension.hide
 import com.opentrivia.app.framework.presenter.LauncherPresenter
 import com.opentrivia.app.framework.view.LauncherView
-import kotlinx.android.synthetic.main.fragment_quiz.*
 import javax.inject.Inject
 
 
@@ -17,9 +17,11 @@ class LauncherFragment : BaseFragment(), LauncherView {
 
     @Inject
     lateinit var presenter: LauncherPresenter
+    private lateinit var binding: FragmentLauncherBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_launcher, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        binding = FragmentLauncherBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,6 +46,6 @@ class LauncherFragment : BaseFragment(), LauncherView {
 
     override fun onError(message: String?) {
         super<BaseFragment>.onError(message)
-        pb_loading.hide()
+        binding.pbLoading.hide()
     }
 }

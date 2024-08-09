@@ -8,7 +8,8 @@ import androidx.core.util.valueIterator
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.FragmentQuizBinding
 import com.opentrivia.app.adapter.SpinnerAdapter
 import com.opentrivia.app.extension.hide
 import com.opentrivia.app.extension.show
@@ -16,7 +17,6 @@ import com.opentrivia.app.framework.model.QuizViewModel
 import com.opentrivia.app.framework.presenter.QuizPresenter
 import com.opentrivia.app.framework.view.QuizView
 import com.opentrivia.app.lib.datasource.model.Questions
-import kotlinx.android.synthetic.main.fragment_quiz.*
 import javax.inject.Inject
 
 
@@ -26,25 +26,27 @@ class QuizFragment : BaseFragment(), QuizView {
     lateinit var presenter: QuizPresenter
     private lateinit var categoryAdapter: SpinnerAdapter
     private lateinit var quizViewModel: QuizViewModel
+    private lateinit var binding: FragmentQuizBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         quizViewModel = activity?.run {
             ViewModelProviders.of(this).get(QuizViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-        quizViewModel.answerMap.observe(this, Observer {
+        quizViewModel.answerMap.observe(this) {
             val correctQuestion = it.valueIterator().asSequence().count {
-                it == true
+                it
             }
-            cv_result.show()
-            tv_time_taken.text = getString(R.string.remaining_time, quizViewModel.remainingTime)
-            tv_correct_count.text =
+            binding.cvResult.show()
+            binding.tvTimeTaken.text =
+                getString(R.string.remaining_time, quizViewModel.remainingTime)
+            binding.tvCorrectCount.text =
                 getString(
                     R.string.correct_answer_count,
                     correctQuestion,
                     quizViewModel.questionList.size
                 )
-        })
+        }
 
     }
 
@@ -52,21 +54,22 @@ class QuizFragment : BaseFragment(), QuizView {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_quiz, container, false)
+    ): View {
+        binding = FragmentQuizBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupOptionSpinners()
-        btn_next.setOnClickListener {
+        binding.btnNext.setOnClickListener {
             showLoadingProgress()
             enableInput(false)
             quizViewModel.clear()
-            cv_result.hide()
-            presenter.getQuestionForQuickQuiz(sp_category.selectedView.tag as String)
+            binding.cvResult.hide()
+            presenter.getQuestionForQuickQuiz(binding.spCategory.selectedView.tag as String)
         }
-        cv_result.setOnClickListener {
+        binding.cvResult.setOnClickListener {
             findNavController().navigate(R.id.action_quiz_fragment_to_result_dialog)
         }
     }
@@ -88,30 +91,30 @@ class QuizFragment : BaseFragment(), QuizView {
         findNavController().navigate(R.id.action_quiz_fragment_to_quick_quiz_dialog)
     }
 
-    fun initCategorySpinner() {
+    private fun initCategorySpinner() {
         val list = appSp.retrieveCategories()
         val defaultValue = "Default" to getString(R.string.noop)
         list.add(0, defaultValue)
         context?.let {
             categoryAdapter = SpinnerAdapter(it, list)
-            sp_category.adapter = categoryAdapter
+            binding.spCategory.adapter = categoryAdapter
         }
     }
 
-    fun setupOptionSpinners() {
+    private fun setupOptionSpinners() {
         initCategorySpinner()
     }
 
-    fun enableInput(enable: Boolean) {
-        sp_category.isEnabled = enable
-        btn_next.isEnabled = enable
+    private fun enableInput(enable: Boolean) {
+        binding.spCategory.isEnabled = enable
+        binding.btnNext.isEnabled = enable
     }
 
-    fun showLoadingProgress() {
-        pb_loading.show()
+    private fun showLoadingProgress() {
+        binding.pbLoading.show()
     }
 
-    fun hideLoadingProgress() {
-        pb_loading.hide()
+    private fun hideLoadingProgress() {
+        binding.pbLoading.hide()
     }
 }

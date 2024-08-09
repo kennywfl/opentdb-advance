@@ -2,18 +2,18 @@ package com.opentrivia.app.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.text.HtmlCompat
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.ViewLoadingBinding
+import com.opentrivia.advance.databinding.ViewNoRecordBinding
+import com.opentrivia.advance.databinding.ViewQuestionsBinding
 import com.opentrivia.app.adapter.model.NetworkState
 import com.opentrivia.app.lib.Constants
 import com.opentrivia.app.lib.datasource.remote.mapping.response.model.Result
-import kotlinx.android.synthetic.main.view_loading.view.*
-import kotlinx.android.synthetic.main.view_questions.view.*
 
 
 const val TYPE_LOADING = 0
@@ -30,15 +30,15 @@ class QuestionListingAdapter(val context: Context?) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder = when (viewType) {
         TYPE_LOADING -> {
-            val view = inflater.inflate(R.layout.view_loading, parent, false)
+            val view = ViewLoadingBinding.inflate(inflater, parent, false)
             LoadingHolder(view)
         }
         TYPE_ITEM -> {
-            val view = inflater.inflate(R.layout.view_questions, parent, false)
+            val view = ViewQuestionsBinding.inflate(inflater, parent, false)
             ItemHolder(view)
         }
         else -> {
-            val view = inflater.inflate(R.layout.view_no_record, parent, false)
+            val view = ViewNoRecordBinding.inflate(inflater, parent, false)
             NoRecordHolder(view)
         }
     }
@@ -118,16 +118,16 @@ class QuestionListingAdapter(val context: Context?) :
     }
 }
 
-class ItemHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvQuestion = view.tv_question
-    val cpDifficulty = view.cp_difficulty
-    val cpType = view.cp_answer_type
+class ItemHolder(view: ViewQuestionsBinding) : RecyclerView.ViewHolder(view.root) {
+    val tvQuestion = view.tvQuestion
+    val cpDifficulty = view.cpDifficulty
+    val cpType = view.cpAnswerType
 }
 
-class LoadingHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val pbLoading = view.pb_loading
+class LoadingHolder(view: ViewLoadingBinding) : RecyclerView.ViewHolder(view.root) {
+    val pbLoading = view.pbLoading
 }
 
-class NoRecordHolder(view: View) : RecyclerView.ViewHolder(view) {
+class NoRecordHolder(view: ViewNoRecordBinding) : RecyclerView.ViewHolder(view.root) {
 
 }

@@ -4,7 +4,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceFragmentCompat
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
 import com.opentrivia.app.lib.Constants
 
 

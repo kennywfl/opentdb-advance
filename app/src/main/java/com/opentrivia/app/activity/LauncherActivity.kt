@@ -1,7 +1,7 @@
 package com.opentrivia.app.activity
 
 import android.os.Bundle
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
 
 class LauncherActivity : BaseActivity() {
 

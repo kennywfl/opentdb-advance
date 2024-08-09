@@ -4,15 +4,14 @@ import android.content.Context
 import android.text.Spannable
 import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
 import androidx.core.text.buildSpannedString
 import androidx.recyclerview.widget.RecyclerView
-import com.opentrivia.app.R
+import com.opentrivia.advance.R
+import com.opentrivia.advance.databinding.ViewResultBinding
 import com.opentrivia.app.lib.datasource.model.Questions
-import kotlinx.android.synthetic.main.view_result.view.*
 
 
 class ResultAdapter(val context: Context?, val result: MutableList<Questions>) :
@@ -21,7 +20,7 @@ class ResultAdapter(val context: Context?, val result: MutableList<Questions>) :
     val inflater = LayoutInflater.from(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultHolder {
-        val view = inflater.inflate(R.layout.view_result, parent, false)
+        val view = ViewResultBinding.inflate(inflater, parent, false)
         return ResultHolder(view)
     }
 
@@ -61,7 +60,7 @@ class ResultAdapter(val context: Context?, val result: MutableList<Questions>) :
     }
 }
 
-class ResultHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val tvQuizQuestion = view.tv_quiz_question
-    val tvQuizAnswer = view.tv_quiz_answer
+class ResultHolder(view: ViewResultBinding) : RecyclerView.ViewHolder(view.root) {
+    val tvQuizQuestion = view.tvQuizQuestion
+    val tvQuizAnswer = view.tvQuizAnswer
 }
