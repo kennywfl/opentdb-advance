@@ -1,103 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <ImageView
-            android:id="@+id/iv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_close"
-            android:tint="?colorAccent"
-            android:background="?android:attr/selectableItemBackgroundBorderless"
-            android:padding="@dimen/padding_16dp"
-            android:contentDescription="@string/close"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+        android:id="@+id/iv_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/close"
+        android:padding="@dimen/padding_16dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="?colorAccent" />
 
     <TextView
-            android:id="@+id/tv_question_count"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:padding="@dimen/padding_16dp"
-            android:textColor="@color/textPrimary"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/iv_close"
-            app:layout_constraintBottom_toBottomOf="@id/iv_close"
-            tools:text="1/10"/>
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:padding="@dimen/padding_16dp"
+        android:textColor="@color/textPrimary"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_close"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_close"
+        tools:text="1/10" />
 
     <TextView
-            android:id="@+id/tv_timer"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:gravity="center"
-            android:textSize="26sp"
-            android:paddingEnd="@dimen/padding_16dp"
-            android:paddingStart="@dimen/padding_16dp"
-            android:text="@string/one_minute"
-            android:textColor="@color/textPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/iv_close"
-            app:layout_constraintTop_toTopOf="@id/iv_close"/>
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:paddingStart="@dimen/padding_16dp"
+        android:paddingEnd="@dimen/padding_16dp"
+        android:text="@string/one_minute"
+        android:textColor="@color/textPrimary"
+        android:textSize="26sp"
+        app:layout_constraintBottom_toBottomOf="@id/iv_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_close" />
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/cv_question"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="@dimen/padding_16dp"
-            android:layout_marginStart="@dimen/padding_16dp"
-            android:layout_marginBottom="@dimen/padding_16dp"
-            app:cardElevation="4dp"
-            app:layout_constraintHeight_percent="0.3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/iv_close">
+        android:id="@+id/cv_question"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/padding_16dp"
+        android:layout_marginEnd="@dimen/padding_16dp"
+        android:layout_marginBottom="@dimen/padding_16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_close">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <TextView
-                    android:id="@+id/lbl_question"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/padding_16dp"
-                    android:text="@string/question"
-                    android:textColor="@color/textPrimary"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@string/question"/>
+                android:id="@+id/lbl_question"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_16dp"
+                android:text="@string/question"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/question" />
+
+            <TextView
+                android:id="@+id/tv_question"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/padding_16dp"
+                android:paddingTop="@dimen/padding_8dp"
+                android:paddingEnd="@dimen/padding_8dp"
+                android:paddingBottom="@dimen/padding_8dp"
+                android:textColor="@color/textPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lbl_question"
+                tools:text="@tools:sample/lorem" />
 
             <com.google.android.material.chip.Chip
-                    android:id="@+id/tv_difficulty"
-                    style="@style/Widget.MaterialComponents.Chip.Action"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/padding_8dp"
-                    android:paddingEnd="@dimen/padding_8dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@id/lbl_question"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="@tools:sample/lorem"/>
-
-            <TextView
-                    android:id="@+id/tv_question"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/padding_16dp"
-                    android:paddingTop="@dimen/padding_8dp"
-                    android:paddingEnd="@dimen/padding_8dp"
-                    android:paddingBottom="@dimen/padding_8dp"
-                    android:textColor="@color/textPrimary"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/lbl_question"
-                    tools:text="@tools:sample/lorem"/>
+                style="@style/Widget.MaterialComponents.Chip.Action"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/padding_8dp"
+                android:paddingEnd="@dimen/padding_8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@id/lbl_question"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@tools:sample/lorem" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -105,109 +101,105 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/cv_option_1"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/padding_16dp"
-            android:layout_marginEnd="8dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/cv_option_2"
-            app:layout_constraintHeight_percent="0.18"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cv_question"
-            app:layout_constraintWidth_percent="0.4">
+        android:id="@+id/cv_option_1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/padding_16dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/cv_option_2"
+        app:layout_constraintHeight_percent="0.18"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_question"
+        app:layout_constraintWidth_percent="0.4">
 
         <TextView
-                android:id="@+id/tv_option_1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:padding="@dimen/padding_8dp"
-                android:textColor="@color/textPrimary"
-                tools:text="@tools:sample/lorem"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:padding="@dimen/padding_8dp"
+            android:textColor="@color/textPrimary"
+            tools:text="@tools:sample/lorem" />
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/cv_option_2"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/padding_16dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_min="wrap"
-            app:layout_constraintHeight_percent="0.18"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@id/cv_option_1"
-            app:layout_constraintTop_toBottomOf="@id/cv_question"
-            app:layout_constraintWidth_percent="0.4">
+        android:id="@+id/cv_option_2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/padding_16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_min="wrap"
+        app:layout_constraintHeight_percent="0.18"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/cv_option_1"
+        app:layout_constraintTop_toBottomOf="@id/cv_question"
+        app:layout_constraintWidth_percent="0.4">
 
         <TextView
-                android:id="@+id/tv_option_2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:padding="@dimen/padding_8dp"
-                android:textColor="@color/textPrimary"
-                tools:text="@tools:sample/lorem"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:padding="@dimen/padding_8dp"
+            android:textColor="@color/textPrimary"
+            tools:text="@tools:sample/lorem" />
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/cv_option_3"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/padding_16dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toStartOf="@+id/cv_option_4"
-            app:layout_constraintHeight_min="wrap"
-            app:layout_constraintHeight_percent="0.18"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cv_option_1"
-            app:layout_constraintWidth_percent="0.4">
+        android:id="@+id/cv_option_3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/padding_16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toStartOf="@+id/cv_option_4"
+        app:layout_constraintHeight_min="wrap"
+        app:layout_constraintHeight_percent="0.18"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cv_option_1"
+        app:layout_constraintWidth_percent="0.4">
 
         <TextView
-                android:id="@+id/tv_option_3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:padding="@dimen/padding_8dp"
-                android:textColor="@color/textPrimary"
-                tools:text="@tools:sample/lorem"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:padding="@dimen/padding_8dp"
+            android:textColor="@color/textPrimary"
+            tools:text="@tools:sample/lorem" />
 
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
-            android:id="@+id/cv_option_4"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="@dimen/padding_16dp"
-            app:cardElevation="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_min="wrap"
-            app:layout_constraintHeight_percent="0.18"
-            app:layout_constraintHorizontal_chainStyle="spread"
-            app:layout_constraintStart_toEndOf="@id/cv_option_3"
-            app:layout_constraintTop_toBottomOf="@id/cv_option_2"
-            app:layout_constraintWidth_percent="0.4">
+        android:id="@+id/cv_option_4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/padding_16dp"
+        app:cardElevation="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_min="wrap"
+        app:layout_constraintHeight_percent="0.18"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toEndOf="@id/cv_option_3"
+        app:layout_constraintTop_toBottomOf="@id/cv_option_2"
+        app:layout_constraintWidth_percent="0.4">
 
         <TextView
-                android:id="@+id/tv_option_4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:padding="@dimen/padding_8dp"
-                android:textColor="@color/textPrimary"
-                tools:text="@tools:sample/lorem"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:padding="@dimen/padding_8dp"
+            android:textColor="@color/textPrimary"
+            tools:text="@tools:sample/lorem" />
 
     </androidx.cardview.widget.CardView>
 

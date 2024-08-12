@@ -22,10 +22,10 @@ class MainPresenter @Inject constructor(
     view: MainView
 ) : BasePresenter<MainView>() {
 
-    lateinit var networkState: Observable<NetworkState>
-    lateinit var pagedList: Flowable<PagedList<Result>>
-    lateinit var questionListDataSourceFactory: QuestionListDataSourceFactory
-    var firstLoad = true
+    private lateinit var networkState: Observable<NetworkState>
+    private lateinit var pagedList: Flowable<PagedList<Result>>
+    private lateinit var questionListDataSourceFactory: QuestionListDataSourceFactory
+    private var firstLoad = true
 
     init {
         bindView(view)

@@ -10,7 +10,7 @@ import dagger.android.ContributesAndroidInjector
 abstract class DialogFragmentInjectorModule {
 
     @DialogFragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(DialogFragmentModule::class))
+    @ContributesAndroidInjector(modules = [DialogFragmentModule::class])
     abstract fun provideQuickQuizDialogFragment(): QuickQuizDialogFragment
 
     @DialogFragmentScope

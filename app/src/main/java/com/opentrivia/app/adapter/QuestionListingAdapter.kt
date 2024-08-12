@@ -69,7 +69,7 @@ class QuestionListingAdapter(val context: Context?) :
         }
     }
 
-    fun onBindItemHolder(holder: ItemHolder, result: Result?) {
+    private fun onBindItemHolder(holder: ItemHolder, result: Result?) {
         result?.apply {
             holder.tvQuestion.text = HtmlCompat.fromHtml(question, HtmlCompat.FROM_HTML_MODE_LEGACY)
             val diff = when (difficulty) {
@@ -128,6 +128,4 @@ class LoadingHolder(view: ViewLoadingBinding) : RecyclerView.ViewHolder(view.roo
     val pbLoading = view.pbLoading
 }
 
-class NoRecordHolder(view: ViewNoRecordBinding) : RecyclerView.ViewHolder(view.root) {
-
-}
+class NoRecordHolder(view: ViewNoRecordBinding) : RecyclerView.ViewHolder(view.root)

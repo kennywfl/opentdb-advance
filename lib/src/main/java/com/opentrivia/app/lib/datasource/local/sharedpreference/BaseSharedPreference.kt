@@ -7,11 +7,7 @@ import androidx.core.content.edit
 
 open class BaseSharedPreference(context: Context, prefFileName: String) {
 
-    val preferences: SharedPreferences
-
-    init {
-        preferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
-    }
+    private val preferences: SharedPreferences = context.getSharedPreferences(prefFileName, Context.MODE_PRIVATE)
 
     fun clear() {
         preferences.edit {

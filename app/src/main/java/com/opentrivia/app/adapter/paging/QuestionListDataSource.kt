@@ -10,11 +10,11 @@ import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 
 
-class QuestionListDataSource(val dataManager: DataManager, val category: Int) :
+class QuestionListDataSource(val dataManager: DataManager, private val category: Int) :
     PageKeyedDataSource<Int, Result>() {
 
     val networkState = PublishSubject.create<NetworkState>()
-    var totalItem = 0
+    private var totalItem = 0
 
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Result>) {
         networkState.onNext(NetworkState.LOADING)

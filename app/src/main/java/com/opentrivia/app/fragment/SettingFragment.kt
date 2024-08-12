@@ -26,7 +26,7 @@ class SettingFragment : PreferenceFragmentCompat(), SharedPreferences.OnSharedPr
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         key?.let {
-            if (it.equals(Constants.SharedPref.Key.PREF_DARK_MODE)) {
+            if (it == Constants.SharedPref.Key.PREF_DARK_MODE) {
                 sharedPreferences?.apply {
                     getBoolean(it, false).apply {
                         AppCompatDelegate.setDefaultNightMode(

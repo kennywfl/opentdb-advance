@@ -35,7 +35,7 @@ class QuizPresenter @Inject constructor(
             amount = Constants.QUIZ_SIZE,
             category = realCategory
         )
-            .map {
+            .map { it ->
                 val questions = mutableListOf<Questions>()
                 if (it.results.isNotEmpty()) {
                     it.results.forEach { result ->
@@ -49,7 +49,7 @@ class QuizPresenter @Inject constructor(
                                 result.category,
                                 result.question,
                                 result.difficulty,
-                                Constants.Api.PARAM_MULTIPLE.equals(result.type),
+                                Constants.Api.PARAM_MULTIPLE == result.type,
                                 listOfAnswer
                             )
                         )

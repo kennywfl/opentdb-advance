@@ -9,7 +9,7 @@ class QuestionListDataSourceFactory(
     val dataManager: DataManager
 ) : DataSource.Factory<Int, Result>() {
 
-    lateinit var source: QuestionListDataSource
+    private lateinit var source: QuestionListDataSource
     val originalSource = PublishSubject.create<QuestionListDataSource>()
     var category = 0
 

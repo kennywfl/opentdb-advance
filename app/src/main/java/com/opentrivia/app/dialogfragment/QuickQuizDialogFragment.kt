@@ -127,12 +127,12 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
         }
     }
 
-    fun updateQuestionCount() {
+    private fun updateQuestionCount() {
         binding.tvQuestionCount.text =
             getString(R.string.question_count, count, quizViewModel.questionList.size)
     }
 
-    fun populateQuestionContent() {
+    private fun populateQuestionContent() {
         buttonMap.clear()
         updateQuestionCount()
         val (_, question, difficulty, isMultiple, answers) = quizViewModel.questionList[count - 1]
@@ -166,11 +166,11 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
             ) else it.toString()
         }
         binding.tvDifficulty.show()
-        if (Constants.Api.PARAM_EASY.equals(difficulty)) {
+        if (Constants.Api.PARAM_EASY == difficulty) {
             binding.tvDifficulty.setChipBackgroundColorResource(R.color.green)
-        } else if (Constants.Api.PARAM_MEDIUM.equals(difficulty)) {
+        } else if (Constants.Api.PARAM_MEDIUM == difficulty) {
             binding.tvDifficulty.setChipBackgroundColorResource(R.color.orange)
-        } else if (Constants.Api.PARAM_HARD.equals(difficulty)) {
+        } else if (Constants.Api.PARAM_HARD == difficulty) {
             binding.tvDifficulty.setChipBackgroundColorResource(R.color.red)
         } else {
             binding.tvDifficulty.hide()

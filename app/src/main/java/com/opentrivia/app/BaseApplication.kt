@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 class BaseApplication : DaggerApplication() {
 
-    val appComponent: AndroidInjector<BaseApplication> by lazy {
+    private val appComponent: AndroidInjector<BaseApplication> by lazy {
         DaggerAppComponent.factory().create(this)
     }
     @Inject

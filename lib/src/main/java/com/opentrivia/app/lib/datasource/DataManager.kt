@@ -26,7 +26,7 @@ class DataManager @Inject constructor(
         return apiService.getTriviaCategories()
     }
 
-    fun resetToken(): Observable<String> {
+    private fun resetToken(): Observable<String> {
         val requestMessage = ApiTokenRequestMessage(
             command = Constants.Api.PARAM_RESET,
             token = appSharedPreference.retrieveToken()
@@ -34,7 +34,7 @@ class DataManager @Inject constructor(
         return getToken(requestMessage)
     }
 
-    fun requestToken(): Observable<String> {
+    private fun requestToken(): Observable<String> {
         val request = ApiTokenRequestMessage(
             command = Constants.Api.PARAM_REQUEST
         )
@@ -66,7 +66,7 @@ class DataManager @Inject constructor(
             }
     }
 
-    fun obtainTokenForApi(): Observable<String> {
+    private fun obtainTokenForApi(): Observable<String> {
         val savedToken = appSharedPreference.retrieveToken()
         return if (savedToken.isNotBlank()) Observable.just(savedToken) else requestToken()
     }
@@ -121,7 +121,7 @@ class DataManager @Inject constructor(
     fun getCategoriesQuestionCount(): Observable<List<QuestionCount>> {
         val map = SparseArray<QuestionCount>()
         return getTriviaCategories()
-            .flatMapIterable {
+            .flatMapIterable { it ->
                 it.triviaCategories?.let {
                     for (triviaCategory in it) {
                         map.put(triviaCategory.id, QuestionCount(question = triviaCategory.name))
@@ -134,7 +134,7 @@ class DataManager @Inject constructor(
             }
             .toList()
             .toObservable()
-            .flatMap {
+            .flatMap { it ->
                 it.forEach { response ->
                     response.categoryId?.let {
                         val questionCount = map.get(it)

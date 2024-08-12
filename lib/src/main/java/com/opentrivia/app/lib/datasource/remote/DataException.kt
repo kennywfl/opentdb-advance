@@ -19,10 +19,7 @@ class DataException(
         get() = throwable?.run {
             this.message
         } ?: errorMessage?.run {
-            if (isNotBlank())
-                this
-            else
-                "Sommething not working."
+            ifBlank { "Sommething not working." }
         }
 
     override fun printStackTrace() {

@@ -10,14 +10,10 @@ import com.opentrivia.advance.databinding.ViewSpinnerDummyHintTextBinding
 import com.opentrivia.advance.databinding.ViewSpinnerTextviewBinding
 
 
-class SpinnerAdapter(context: Context, val dataList: MutableList<Pair<String, String>>) :
+class SpinnerAdapter(context: Context, private val dataList: MutableList<Pair<String, String>>) :
     ArrayAdapter<Pair<String, String>>(context, 0, dataList) {
 
-    val inflater: LayoutInflater
-
-    init {
-        inflater = LayoutInflater.from(context)
-    }
+    val inflater: LayoutInflater = LayoutInflater.from(context)
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = ViewSpinnerTextviewBinding.inflate(inflater, parent, false)

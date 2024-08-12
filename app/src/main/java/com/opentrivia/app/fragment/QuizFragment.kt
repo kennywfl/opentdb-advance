@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.util.valueIterator
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.opentrivia.advance.R
@@ -33,7 +32,7 @@ class QuizFragment : BaseFragment(), QuizView {
         quizViewModel = activity?.run {
             ViewModelProviders.of(this).get(QuizViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
-        quizViewModel.answerMap.observe(this) {
+        quizViewModel.answerMap.observe(this) { it ->
             val correctQuestion = it.valueIterator().asSequence().count {
                 it
             }

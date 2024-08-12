@@ -20,14 +20,14 @@ import javax.net.ssl.TrustManagerFactory
 import javax.net.ssl.X509TrustManager
 
 
-open class BaseNetworkHelper<S>(val context: Context, val serviceClass: Class<S>) {
+open class BaseNetworkHelper<S>(val context: Context, private val serviceClass: Class<S>) {
 
     fun createService(baseUrl: String, interceptor: ArrayList<Interceptor>): S {
         val client = if (Constants.USE_SSL) createSafeOkHttpClient() else createUnsafeOkHttpClient()
         if (interceptor.isNotEmpty()) {
             client.interceptors().addAll(interceptor)
         }
-        val logging = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger { message ->
+        val logging = HttpLoggingInterceptor({ message ->
             Timber.d(message)
         })
         logging.level = HttpLoggingInterceptor.Level.BODY
@@ -48,9 +48,9 @@ open class BaseNetworkHelper<S>(val context: Context, val serviceClass: Class<S>
             val httpClient = OkHttpClient.Builder()
             val trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm())
             trustManagerFactory.init(null as KeyStore?)
-            val trustManagers = trustManagerFactory.getTrustManagers()
+            val trustManagers = trustManagerFactory.trustManagers
             if (trustManagers.size != 1 || trustManagers[0] !is X509TrustManager) {
-                throw IllegalStateException("Unexpected default trust managers:" + Arrays.toString(trustManagers))
+                throw IllegalStateException("Unexpected default trust managers:" + trustManagers.contentToString())
             }
             val trustManager = trustManagers[0] as X509TrustManager
             val sslContext = SSLContext.getInstance("TLS")

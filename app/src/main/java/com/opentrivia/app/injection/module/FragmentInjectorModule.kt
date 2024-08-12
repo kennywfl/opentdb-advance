@@ -12,18 +12,18 @@ import dagger.android.ContributesAndroidInjector
 abstract class FragmentInjectorModule {
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(FragmentModule::class))
+    @ContributesAndroidInjector(modules = [FragmentModule::class])
     abstract fun provideLauncherFragment(): LauncherFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(FragmentModule::class))
+    @ContributesAndroidInjector(modules = [FragmentModule::class])
     abstract fun provideMainFragment(): MainFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(FragmentModule::class))
+    @ContributesAndroidInjector(modules = [FragmentModule::class])
     abstract fun provideCatalogFragment(): CatalogFragment
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = arrayOf(FragmentModule::class))
+    @ContributesAndroidInjector(modules = [FragmentModule::class])
     abstract fun provideQuizFragment(): QuizFragment
 }

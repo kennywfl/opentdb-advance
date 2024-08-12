@@ -7,5 +7,4 @@ data class QuestionCount(
     var mediumCount: Int = 0,
     var easyCount: Int = 0,
     var totalCount: Int = 0
-) {
-}
+)

@@ -20,8 +20,6 @@
     <string name="configure_your_option_to_get_started">Choose the category you want to start the quiz or leave it empty for question from all categories. \nThere are total of <strong>Ten</strong> questions. \nTime limit is <strong>One</strong> minutes.</string>
     <string name="next">Next</string>
     <string name="select_category">Select category:</string>
-    <string name="select_difficulty">Select difficulty:</string>
-    <string name="select_type">Select type:</string>
     <string name="noop">noop</string>
     <string name="close">Close</string>
     <string name="one_minute">01:00</string>

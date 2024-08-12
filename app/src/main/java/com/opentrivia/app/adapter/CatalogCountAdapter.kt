@@ -9,7 +9,7 @@ import com.opentrivia.advance.databinding.ViewCategoryCountBinding
 import com.opentrivia.app.lib.datasource.model.QuestionCount
 
 
-class CatalogCountAdapter(val context: Context?, val data: MutableList<QuestionCount>) :
+class CatalogCountAdapter(val context: Context?, private val data: MutableList<QuestionCount>) :
     RecyclerView.Adapter<CountHolder>() {
 
     val inflater: LayoutInflater = LayoutInflater.from(context)

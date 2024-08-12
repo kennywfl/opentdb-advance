@@ -58,7 +58,7 @@ class CatalogFragment : BaseFragment(), CatalogView {
         binding.srlCategoryCount.isRefreshing = false
     }
 
-    fun setupRecyclerAdapter() {
+    private fun setupRecyclerAdapter() {
         adapter = CatalogCountAdapter(context, mutableListOf())
         binding.rvCategoryCount.layoutManager =
             LinearLayoutManager(context, RecyclerView.VERTICAL, false)

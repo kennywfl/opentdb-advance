@@ -30,7 +30,7 @@ class AppSharedPreference @Inject constructor(@ApplicationContext val context: C
         val categoryList = mutableListOf<Pair<String, String>>()
         val value = getStringValue(Constants.SharedPref.Key.PREF_CATEGORIES, "")
         val categories = Gson().fromJson<ApiCategoryResponseMessage>(value, ApiCategoryResponseMessage::class.java)
-        categories.triviaCategories?.let {
+        categories.triviaCategories?.let { it ->
             it.forEach {
                 categoryList.add(it.name to it.id.toString())
             }
