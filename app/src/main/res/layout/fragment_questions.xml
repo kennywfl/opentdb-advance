@@ -18,6 +18,7 @@
         app:tint="?colorAccent" />
 
     <TextView
+        android:id="@+id/tv_question_count"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:padding="@dimen/padding_16dp"
@@ -29,6 +30,7 @@
         tools:text="1/10" />
 
     <TextView
+        android:id="@+id/tv_timer"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:gravity="center"
@@ -84,6 +86,7 @@
                 tools:text="@tools:sample/lorem" />
 
             <com.google.android.material.chip.Chip
+                android:id="@+id/tv_difficulty"
                 style="@style/Widget.MaterialComponents.Chip.Action"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,6 +117,7 @@
         app:layout_constraintWidth_percent="0.4">
 
         <TextView
+            android:id="@+id/tv_option_1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -140,6 +144,7 @@
         app:layout_constraintWidth_percent="0.4">
 
         <TextView
+            android:id="@+id/tv_option_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -166,6 +171,7 @@
         app:layout_constraintWidth_percent="0.4">
 
         <TextView
+            android:id="@+id/tv_option_3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -192,6 +198,7 @@
         app:layout_constraintWidth_percent="0.4">
 
         <TextView
+            android:id="@+id/tv_option_4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

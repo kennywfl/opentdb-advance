@@ -13,14 +13,14 @@ android {
         viewBinding true
     }
 
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "com.opentrivia.advance"
         minSdk 21
-        targetSdk 34
-        versionCode 11
-        versionName "1.1"
+        targetSdk 35
+        versionCode 12
+        versionName "1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -39,8 +39,12 @@ android {
     namespace "com.opentrivia.advance"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
+    }
+
+    kotlinOptions {
+        jvmTarget = "21"
     }
 }
 
