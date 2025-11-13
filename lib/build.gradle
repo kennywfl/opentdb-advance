@@ -1,18 +1,16 @@
-apply plugin: 'com.android.library'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-kapt'
-
-apply from: '../dependencies.gradle'
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+}
 
 android {
 
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 35
+        minSdkVersion 26
+        targetSdkVersion 36
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -42,23 +40,16 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    api "androidx.core:core-ktx:${versions.androidx.core}"
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions.kotlin}"
-    implementation "com.squareup.retrofit2:retrofit:$versions.square.retrofit"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:${versions.square.retrofit}"
-    implementation "com.squareup.retrofit2:converter-gson:${versions.square.retrofit}"
-    implementation "com.squareup.okhttp3:logging-interceptor:${versions.square.okhttp}"
-    api "com.google.code.gson:gson:${versions.google.gson}"
-    api "com.google.dagger:dagger:${versions.dagger}"
-    api "com.google.dagger:dagger-android:${versions.dagger}"
-    api "com.google.dagger:dagger-android-support:${versions.dagger}"
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
-    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
-    api "com.jakewharton.timber:timber:${versions.timber}"
-    api "io.reactivex.rxjava2:rxjava:${versions.rx.java}"
-    api "io.reactivex.rxjava2:rxandroid:${versions.rx.android}"
-    api "io.reactivex.rxjava2:rxkotlin:${versions.rx.kotlin}"
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
+    api libs.androidx.core.ktx
+    implementation libs.bundles.retrofit
+    implementation libs.okhttp.logging.interceptor
+    api libs.gson
+    api libs.bundles.dagger
+    kapt libs.dagger.compiler
+    kapt libs.dagger.android.processor
+    api libs.timber
+    api libs.bundles.rx
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation libs.androidx.test.espresso.core
 }

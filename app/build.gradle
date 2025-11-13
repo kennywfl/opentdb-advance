@@ -1,24 +1,21 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-kapt'
-
-apply plugin: "androidx.navigation.safeargs.kotlin"
-
-apply from: '../dependencies.gradle'
+plugins {
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.navigation.safeargs.kotlin)
+}
 
 android {
     buildFeatures {
         viewBinding true
     }
 
-    compileSdk 35
+    compileSdk 36
 
     defaultConfig {
         applicationId "com.opentrivia.advance"
-        minSdk 21
-        targetSdk 35
+        minSdk 26
+        targetSdk 36
         versionCode 12
         versionName "1.1.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -51,22 +48,23 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation project(":lib")
-    implementation "androidx.appcompat:appcompat:${versions.androidx.appcompat}"
-    implementation "androidx.constraintlayout:constraintlayout:${versions.androidx.constraint}"
-    implementation "androidx.recyclerview:recyclerview:${versions.androidx.recyclerview}"
-    implementation "androidx.cardview:cardview:${versions.androidx.cardview}"
-    implementation "androidx.preference:preference:${versions.androidx.preference}"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:${versions.androidx.swiperefreshlayout}"
-    implementation "androidx.lifecycle:lifecycle-extensions:${versions.androidx.viewmodel}"
-    implementation "androidx.paging:paging-runtime:${versions.androidx.paging}"
-    implementation "androidx.paging:paging-rxjava2:${versions.androidx.paging}"
-    implementation "androidx.navigation:navigation-fragment-ktx:${versions.androidx.navigation}"
-    implementation "androidx.navigation:navigation-ui-ktx:${versions.androidx.navigation}"
-    implementation "com.google.android.material:material:${versions.google.material}"
-    implementation "com.jakewharton.rxbinding3:rxbinding:${versions.rx.binding}"
-    kapt "com.google.dagger:dagger-compiler:${versions.dagger}"
-    kapt "com.google.dagger:dagger-android-processor:${versions.dagger}"
-    testImplementation "junit:junit:${versions.test.junit}"
-    androidTestImplementation "androidx.test:runner:${versions.test.androidtestrunner}"
-    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.test.espresso}"
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.recyclerview
+    implementation libs.androidx.cardview
+    implementation libs.androidx.preference
+    implementation libs.androidx.swiperefreshlayout
+    implementation libs.androidx.lifecycle.extensions
+    implementation libs.androidx.paging.runtime
+    implementation libs.androidx.paging.rxjava2
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.google.material
+    implementation libs.rxbinding
+    kapt libs.dagger.compiler
+    kapt libs.dagger.android.processor
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.test.runner
+    androidTestImplementation libs.androidx.test.espresso.core
 }
