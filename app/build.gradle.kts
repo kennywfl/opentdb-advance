@@ -57,8 +57,6 @@ dependencies {
     implementation(project(":lib"))
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.preference)
-    implementation(libs.google.material)
     implementation(libs.bundles.navigation3)
     implementation(libs.lifecycle.viewmodel.navigation3)
     implementation(platform(libs.compose.bom))
@@ -71,7 +69,5 @@ dependencies {
     implementation(libs.bundles.coroutines)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.test.espresso.core)
+
 }

@@ -1,7 +1,6 @@
 package com.opentrivia.app.lib.datasource.local.sharedpreference
 
 import android.content.Context
-import android.preference.PreferenceManager
 import com.opentrivia.app.lib.Constants
 import com.opentrivia.app.lib.datasource.remote.mapping.response.ApiCategoryResponseMessage
 import kotlinx.serialization.json.Json
@@ -37,7 +36,10 @@ class AppSharedPreference(private val context: Context) :
     }
 
     fun isDarkModeSelected() =
-        PreferenceManager.getDefaultSharedPreferences(context).getBoolean(
+        context.getSharedPreferences(
+            context.packageName + "_preferences",
+            Context.MODE_PRIVATE
+        ).getBoolean(
             Constants.SharedPref.Key.PREF_DARK_MODE,
             false
         )

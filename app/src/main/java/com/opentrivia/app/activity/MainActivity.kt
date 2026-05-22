@@ -9,7 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.DropdownMenu
@@ -75,7 +75,7 @@ private data class BottomTab(
 
 private val bottomTabs = listOf(
     BottomTab(NavRoute.Main, "Browse", Icons.Filled.Home),
-    BottomTab(NavRoute.Catalog, "Catalog", Icons.Filled.List),
+    BottomTab(NavRoute.Catalog, "Catalog", Icons.AutoMirrored.Filled.List),
     BottomTab(NavRoute.Quiz, "Quiz", Icons.Filled.Star)
 )
 

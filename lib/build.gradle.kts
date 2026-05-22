@@ -10,7 +10,6 @@ android {
     defaultConfig {
         minSdk = 26
         targetSdk = 36
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -48,15 +47,11 @@ dependencies {
     implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.okhttp.logging.interceptor.new)
     implementation(libs.okhttp)
-    api(libs.gson)
     api(libs.timber)
     api(platform(libs.koin.bom))
     api(libs.koin.core)
     api(libs.koin.android)
-    api(libs.bundles.rx)
     api(libs.kotlinx.serialization.json)
     api(libs.bundles.coroutines)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.test.espresso.core)
+
 }
