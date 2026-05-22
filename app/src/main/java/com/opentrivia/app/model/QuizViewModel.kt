@@ -1,4 +1,4 @@
-package com.opentrivia.app.framework.model
+package com.opentrivia.app.model
 
 import android.util.SparseBooleanArray
 import androidx.lifecycle.MutableLiveData

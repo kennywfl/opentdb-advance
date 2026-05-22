@@ -1,12 +1,11 @@
 package com.opentrivia.app.dialogfragment
 
+import androidx.fragment.app.DialogFragment
 import com.opentrivia.app.lib.datasource.local.sharedpreference.AppSharedPreference
-import dagger.android.support.DaggerDialogFragment
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
 
-open class BaseDialogFragment : DaggerDialogFragment() {
+open class BaseDialogFragment : DialogFragment() {
 
-    @Inject
-    lateinit var appSp: AppSharedPreference
+    val appSp: AppSharedPreference by inject()
 }

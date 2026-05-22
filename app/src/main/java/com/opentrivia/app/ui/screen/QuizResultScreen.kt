@@ -29,7 +29,7 @@ fun QuizResultScreen(
                 title = { Text("Results") },
                 actions = {
                     IconButton(onClick = onCloseClick) {
-                        Icon(Icons.Default.Close, contentDescription = "Close")
+                        Icon(Icons.Filled.Close, contentDescription = "Close")
                     }
                 }
             )

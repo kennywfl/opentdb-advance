@@ -68,7 +68,7 @@ fun QuickQuizScreen(
             )
             IconButton(onClick = onCloseClick) {
                 Icon(
-                    imageVector = Icons.Default.Close,
+                    imageVector = Icons.Filled.Close,
                     contentDescription = "Close",
                     tint = MaterialTheme.colorScheme.secondary
                 )

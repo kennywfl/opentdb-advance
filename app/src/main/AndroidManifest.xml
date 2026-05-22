@@ -33,7 +33,6 @@
                     android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.opentrivia.app.activity.MainActivity" />
         </activity>
-        <activity android:name="com.opentrivia.app.activity.BaseActivity" />
     </application>
 
 </manifest>

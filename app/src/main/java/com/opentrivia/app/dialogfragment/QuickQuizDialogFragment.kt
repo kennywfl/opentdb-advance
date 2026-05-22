@@ -13,22 +13,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import com.opentrivia.advance.R
-import com.opentrivia.app.framework.model.QuizViewModel
-import com.opentrivia.app.framework.presenter.QuickQuizPresenter
-import com.opentrivia.app.framework.view.QuickQuizView
+import com.opentrivia.app.model.QuizViewModel
 import com.opentrivia.app.lib.Constants
 import com.opentrivia.app.ui.screen.QuickQuizScreen
 import com.opentrivia.app.ui.theme.AppTheme
-import javax.inject.Inject
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import androidx.lifecycle.lifecycleScope
 
 
-class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView {
+class QuickQuizDialogFragment : BaseDialogFragment() {
 
-    @Inject
-    lateinit var presenter: QuickQuizPresenter
-    private lateinit var quizViewModel: QuizViewModel
+    private val quizViewModel: QuizViewModel by viewModels(ownerProducer = { requireActivity() })
 
     private var count by mutableIntStateOf(1)
     private val answerMap = SparseBooleanArray()
@@ -46,9 +44,6 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        quizViewModel = activity?.run {
-            ViewModelProviders.of(this).get(QuizViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.NoTitleDialog)
     }
 
@@ -69,8 +64,7 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView {
                         isMultiple = isMultiple,
                         onCloseClick = { dismiss() },
                         onOptionClick = { id ->
-                            val result = id
-                            answerMap.put(count, result == 1 || result == 2 || result == 3 || result == 4)
+                            answerMap.put(count, id == 1 || id == 2 || id == 3 || id == 4)
                             if (count >= Constants.QUIZ_SIZE) {
                                 quizViewModel.remainingTime = timerText
                                 quizViewModel.answerMap.postValue(answerMap)
@@ -89,12 +83,11 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         populateQuestionContent()
-        presenter.startTimer()
+        startTimer()
     }
 
     override fun onStart() {
         super.onStart()
-        presenter.bindView(this)
         val window = dialog?.window
         if (window != null) {
             val params = window.attributes
@@ -104,31 +97,29 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView {
         }
     }
 
-    override fun onStop() {
-        super.onStop()
-        presenter.unbindView()
-    }
-
-    override fun onTimeCountDown(remainingTime: Long) {
-        timerColor = if (remainingTime > 5) {
-            androidx.compose.ui.graphics.Color.Unspecified
-        } else {
-            com.opentrivia.app.ui.theme.Red
-        }
-        timerText = Constants.COUNT_DOWN_TEXT.format(remainingTime)
-    }
-
-    override fun onCountDownFinished() {
-        val currentSize = answerMap.size()
-        if (currentSize != Constants.QUIZ_SIZE) {
-            val remaining = Constants.QUIZ_SIZE - currentSize
-            for (i in 1..remaining) {
-                answerMap.put(currentSize + i, false)
+    private fun startTimer() {
+        lifecycleScope.launch {
+            for (i in 1..Constants.COUNT_DOWN_TIMER) {
+                delay(1000)
+                val remaining = Constants.COUNT_DOWN_TIMER - i
+                timerColor = if (remaining > 5) {
+                    androidx.compose.ui.graphics.Color.Unspecified
+                } else {
+                    com.opentrivia.app.ui.theme.Red
+                }
+                timerText = Constants.COUNT_DOWN_TEXT.format(remaining)
             }
+            val currentSize = answerMap.size()
+            if (currentSize != Constants.QUIZ_SIZE) {
+                val remaining = Constants.QUIZ_SIZE - currentSize
+                for (i in 1..remaining) {
+                    answerMap.put(currentSize + i, false)
+                }
+            }
+            quizViewModel.remainingTime = timerText
+            quizViewModel.answerMap.postValue(answerMap)
+            dismiss()
         }
-        quizViewModel.remainingTime = timerText
-        quizViewModel.answerMap.postValue(answerMap)
-        dismiss()
     }
 
     private fun populateQuestionContent() {

@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -50,10 +49,10 @@ dependencies {
     implementation(libs.okhttp.logging.interceptor.new)
     implementation(libs.okhttp)
     api(libs.gson)
-    api(libs.bundles.dagger)
-    kapt(libs.dagger.compiler)
-    kapt(libs.dagger.android.processor)
     api(libs.timber)
+    api(platform(libs.koin.bom))
+    api(libs.koin.core)
+    api(libs.koin.android)
     api(libs.bundles.rx)
     api(libs.kotlinx.serialization.json)
     api(libs.bundles.coroutines)

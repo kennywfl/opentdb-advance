@@ -1,5 +1,5 @@
 package com.opentrivia.app.activity
 
-import dagger.android.support.DaggerAppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
-open class BaseActivity : DaggerAppCompatActivity()
+open class BaseActivity : AppCompatActivity()

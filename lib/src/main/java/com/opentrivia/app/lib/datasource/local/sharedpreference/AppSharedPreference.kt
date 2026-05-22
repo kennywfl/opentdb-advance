@@ -4,12 +4,10 @@ import android.content.Context
 import android.preference.PreferenceManager
 import com.opentrivia.app.lib.Constants
 import com.opentrivia.app.lib.datasource.remote.mapping.response.ApiCategoryResponseMessage
-import com.opentrivia.app.lib.injection.qualifier.ApplicationContext
-import javax.inject.Inject
 import kotlinx.serialization.json.Json
 
 
-class AppSharedPreference @Inject constructor(@ApplicationContext val context: Context) :
+class AppSharedPreference(private val context: Context) :
     BaseSharedPreference(context, Constants.SharedPref.PREF_NAME_MAIN) {
 
     fun saveToken(token: String) {

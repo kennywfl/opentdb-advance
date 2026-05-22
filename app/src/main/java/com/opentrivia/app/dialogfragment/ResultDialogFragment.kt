@@ -5,45 +5,52 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
+import androidx.core.text.HtmlCompat
 import androidx.core.util.forEach
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.fragment.app.viewModels
 import com.opentrivia.advance.R
-import com.opentrivia.app.adapter.ResultAdapter
-import com.opentrivia.app.framework.model.QuizViewModel
-import com.opentrivia.app.ui.screen.QuizResultScreen
+import com.opentrivia.app.model.QuizViewModel
 import com.opentrivia.app.ui.theme.AppTheme
+import com.opentrivia.app.lib.datasource.model.Questions
 
 
 class ResultDialogFragment : BaseDialogFragment() {
 
-    private lateinit var quizViewModel: QuizViewModel
-    private lateinit var recyclerView: RecyclerView
+    private val quizViewModel: QuizViewModel by viewModels(ownerProducer = { requireActivity() })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NO_FRAME, R.style.NoTitleDialog)
-        quizViewModel = activity?.run {
-            ViewModelProviders.of(this).get(QuizViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
         populateAnswerCorrectlyFlag()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        val adapter = ResultAdapter(context, quizViewModel.questionList)
-        recyclerView = RecyclerView(requireContext()).apply {
-            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-            this.adapter = adapter
-        }
-
         return ComposeView(requireContext()).apply {
             setContent {
                 AppTheme {
-                    QuizResultScreen(
-                        recyclerView = recyclerView,
+                    QuizResultContent(
+                        questions = quizViewModel.questionList,
                         onCloseClick = { dismiss() }
                     )
                 }
@@ -67,5 +74,52 @@ class ResultDialogFragment : BaseDialogFragment() {
             quizViewModel.questionList[key - 1].answerCorrectly = value
         }
     }
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun QuizResultContent(
+    questions: List<com.opentrivia.app.lib.datasource.model.Questions>,
+    onCloseClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Results") },
+                actions = {
+                    IconButton(onClick = onCloseClick) {
+                        Icon(Icons.Filled.Close, contentDescription = "Close")
+                    }
+                }
+            )
+        },
+        modifier = modifier
+    ) { padding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+        ) {
+            itemsIndexed(questions) { index, question ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 4.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = "Q${index + 1}: ${HtmlCompat.fromHtml(question.question, HtmlCompat.FROM_HTML_MODE_LEGACY)}",
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        Text(
+                            text = if (question.answerCorrectly) "Correct" else "Incorrect",
+                            color = if (question.answerCorrectly) com.opentrivia.app.ui.theme.Green else com.opentrivia.app.ui.theme.Red,
+                            style = MaterialTheme.typography.labelMedium
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

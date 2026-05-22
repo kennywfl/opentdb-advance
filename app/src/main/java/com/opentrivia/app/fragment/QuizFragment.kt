@@ -9,23 +9,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.util.valueIterator
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.opentrivia.advance.R
-import com.opentrivia.app.framework.model.QuizViewModel
-import com.opentrivia.app.framework.presenter.QuizPresenter
-import com.opentrivia.app.framework.view.QuizView
+import com.opentrivia.app.model.QuizViewModel
+import com.opentrivia.app.lib.Constants
+import com.opentrivia.app.lib.datasource.DataManager
 import com.opentrivia.app.lib.datasource.model.Questions
 import com.opentrivia.app.ui.screen.QuizScreen
 import com.opentrivia.app.ui.theme.AppTheme
-import javax.inject.Inject
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 
 
-class QuizFragment : BaseFragment(), QuizView {
+class QuizFragment : BaseFragment() {
 
-    @Inject
-    lateinit var presenter: QuizPresenter
-    private lateinit var quizViewModel: QuizViewModel
+    private val dataManager: DataManager by inject()
+    private val quizViewModel: QuizViewModel by viewModels(ownerProducer = { requireActivity() })
 
     private var isInputEnabled by mutableStateOf(true)
     private var isLoading by mutableStateOf(false)
@@ -36,9 +38,6 @@ class QuizFragment : BaseFragment(), QuizView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        quizViewModel = activity?.run {
-            ViewModelProviders.of(this).get(QuizViewModel::class.java)
-        } ?: throw Exception("Invalid Activity")
         quizViewModel.answerMap.observe(this) { it ->
             val correctQuestion = it.valueIterator().asSequence().count { it }
             isResultVisible = true
@@ -67,9 +66,7 @@ class QuizFragment : BaseFragment(), QuizView {
                         isResultVisible = isResultVisible,
                         resultTime = resultTime,
                         resultCorrectCount = resultCorrectCount,
-                        onCategorySelected = { index ->
-                            val selected = categories[index]
-                        },
+                        onCategorySelected = { },
                         onNextClick = {
                             isLoading = true
                             isInputEnabled = false
@@ -77,7 +74,7 @@ class QuizFragment : BaseFragment(), QuizView {
                             isResultVisible = false
                             val list = appSp.retrieveCategories()
                             val categoryId = list.firstOrNull()?.second ?: ""
-                            presenter.getQuestionForQuickQuiz(categoryId)
+                            fetchQuestions(categoryId)
                         },
                         onResultClick = {
                             findNavController().navigate(R.id.action_quiz_fragment_to_result_dialog)
@@ -95,20 +92,45 @@ class QuizFragment : BaseFragment(), QuizView {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        presenter.bindView(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        presenter.unbindView()
-    }
-
-    override fun onRetrieveQuestionList(questions: MutableList<Questions>) {
-        isLoading = false
-        quizViewModel.questionList = questions
-        isInputEnabled = true
-        findNavController().navigate(R.id.action_quiz_fragment_to_quick_quiz_dialog)
+    private fun fetchQuestions(categoryId: String) {
+        val realCategory = if (categoryId == "noop") null else categoryId.toIntOrNull()
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = dataManager.getTriviaWithToken(
+                    amount = Constants.QUIZ_SIZE,
+                    category = realCategory
+                )
+                val questions = mutableListOf<Questions>()
+                if (response.results.isNotEmpty()) {
+                    response.results.forEach { result ->
+                        val listOfAnswer = mutableListOf(result.correctAnswer to true)
+                        result.incorrectAnswers.forEach {
+                            listOfAnswer.add(it to false)
+                        }
+                        listOfAnswer.shuffle()
+                        questions.add(
+                            Questions(
+                                result.category,
+                                result.question,
+                                result.difficulty,
+                                Constants.Api.PARAM_MULTIPLE == result.type,
+                                listOfAnswer
+                            )
+                        )
+                    }
+                }
+                requireActivity().runOnUiThread {
+                    isLoading = false
+                    quizViewModel.questionList = questions
+                    isInputEnabled = true
+                    findNavController().navigate(R.id.action_quiz_fragment_to_quick_quiz_dialog)
+                }
+            } catch (e: Exception) {
+                requireActivity().runOnUiThread {
+                    isLoading = false
+                    showError(e.message)
+                }
+            }
+        }
     }
 }

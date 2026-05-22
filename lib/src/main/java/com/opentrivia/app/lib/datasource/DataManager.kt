@@ -14,10 +14,7 @@ import com.opentrivia.app.lib.datasource.remote.service.ApiService
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import javax.inject.Inject
-
-
-class DataManager @Inject constructor(
+class DataManager constructor(
     val apiService: ApiService,
     val appSharedPreference: AppSharedPreference
 ) {
