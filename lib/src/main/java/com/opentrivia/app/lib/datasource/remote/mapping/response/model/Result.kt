@@ -1,22 +1,17 @@
 package com.opentrivia.app.lib.datasource.remote.mapping.response.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
-class Result {
-    @SerializedName("category")
-    lateinit var category: String
-    @SerializedName("type")
-    lateinit var type: String
-    @SerializedName("difficulty")
-    lateinit var difficulty: String
-    @SerializedName("question")
-    lateinit var question: String
-    @SerializedName("correct_answer")
-    lateinit var correctAnswer: String
-    @SerializedName("incorrect_answers")
-    lateinit var incorrectAnswers: List<String>
-
+@Serializable
+class Result(
+    @SerialName("category") var category: String = "",
+    @SerialName("type") var type: String = "",
+    @SerialName("difficulty") var difficulty: String = "",
+    @SerialName("question") var question: String = "",
+    @SerialName("correct_answer") var correctAnswer: String = "",
+    @SerialName("incorrect_answers") var incorrectAnswers: List<String> = emptyList()
+) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -38,6 +33,4 @@ class Result {
         result = 31 * result + question.hashCode()
         return result
     }
-
-
 }

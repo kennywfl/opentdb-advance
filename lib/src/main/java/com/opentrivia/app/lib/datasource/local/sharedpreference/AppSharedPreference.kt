@@ -2,11 +2,11 @@ package com.opentrivia.app.lib.datasource.local.sharedpreference
 
 import android.content.Context
 import android.preference.PreferenceManager
-import com.google.gson.Gson
 import com.opentrivia.app.lib.Constants
 import com.opentrivia.app.lib.datasource.remote.mapping.response.ApiCategoryResponseMessage
 import com.opentrivia.app.lib.injection.qualifier.ApplicationContext
 import javax.inject.Inject
+import kotlinx.serialization.json.Json
 
 
 class AppSharedPreference @Inject constructor(@ApplicationContext val context: Context) :
@@ -29,9 +29,9 @@ class AppSharedPreference @Inject constructor(@ApplicationContext val context: C
     fun retrieveCategories(): MutableList<Pair<String, String>> {
         val categoryList = mutableListOf<Pair<String, String>>()
         val value = getStringValue(Constants.SharedPref.Key.PREF_CATEGORIES, "")
-        val categories = Gson().fromJson<ApiCategoryResponseMessage>(value, ApiCategoryResponseMessage::class.java)
-        categories.triviaCategories?.let { it ->
-            it.forEach {
+        if (value.isNotBlank()) {
+            val categories = Json.decodeFromString<ApiCategoryResponseMessage>(value)
+            categories.triviaCategories.forEach {
                 categoryList.add(it.name to it.id.toString())
             }
         }

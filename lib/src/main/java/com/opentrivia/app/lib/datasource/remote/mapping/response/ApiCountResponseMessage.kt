@@ -1,12 +1,11 @@
 package com.opentrivia.app.lib.datasource.remote.mapping.response
 
-import com.google.gson.annotations.SerializedName
 import com.opentrivia.app.lib.datasource.remote.mapping.response.model.CategoryQuestionCount
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
-class ApiCountResponseMessage : BaseResponseMessage() {
-    @SerializedName("category_id")
-    var categoryId: Int? = null
-    @SerializedName("category_question_count")
-    var categoryQuestionCount: CategoryQuestionCount? = null
-}
+@Serializable
+data class ApiCountResponseMessage(
+    @SerialName("category_id") val categoryId: Int? = null,
+    @SerialName("category_question_count") val categoryQuestionCount: CategoryQuestionCount? = null
+)

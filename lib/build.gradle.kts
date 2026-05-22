@@ -45,7 +45,8 @@ kotlin {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     api(libs.androidx.core.ktx)
-    implementation(libs.bundles.retrofit)
+    implementation(libs.retrofit.new)
+    implementation(libs.retrofit.converter.kotlinx.serialization)
     implementation(libs.okhttp.logging.interceptor.new)
     implementation(libs.okhttp)
     api(libs.gson)

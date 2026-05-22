@@ -1,12 +1,11 @@
 package com.opentrivia.app.lib.datasource.remote.mapping.response
 
-import com.google.gson.annotations.SerializedName
 import com.opentrivia.app.lib.datasource.remote.mapping.response.model.Result
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
-class ApiTriviaResponseMessage : BaseResponseMessage() {
-    @SerializedName("response_code")
-    var responseCode: Int = -1
-    @SerializedName("results")
-    lateinit var results: List<Result>
-}
+@Serializable
+data class ApiTriviaResponseMessage(
+    @SerialName("response_code") val responseCode: Int = -1,
+    @SerialName("results") val results: List<Result> = emptyList()
+)

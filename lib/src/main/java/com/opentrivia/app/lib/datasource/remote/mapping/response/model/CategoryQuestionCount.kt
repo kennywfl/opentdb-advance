@@ -1,15 +1,12 @@
 package com.opentrivia.app.lib.datasource.remote.mapping.response.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
-class CategoryQuestionCount {
-    @SerializedName("total_question_count")
-    var totalQuestionCount: Int? = 0
-    @SerializedName("total_easy_question_count")
-    var totalEasyQuestionCount: Int? = 0
-    @SerializedName("total_medium_question_count")
-    var totalMediumQuestionCount: Int? = 0
-    @SerializedName("total_hard_question_count")
-    var totalHardQuestionCount: Int? = 0
-}
+@Serializable
+data class CategoryQuestionCount(
+    @SerialName("total_question_count") val totalQuestionCount: Int = 0,
+    @SerialName("total_easy_question_count") val totalEasyQuestionCount: Int = 0,
+    @SerialName("total_medium_question_count") val totalMediumQuestionCount: Int = 0,
+    @SerialName("total_hard_question_count") val totalHardQuestionCount: Int = 0
+)

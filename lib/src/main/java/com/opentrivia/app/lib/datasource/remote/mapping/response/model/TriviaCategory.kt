@@ -1,13 +1,12 @@
 package com.opentrivia.app.lib.datasource.remote.mapping.response.model
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
-class TriviaCategory {
-
-    @SerializedName("id")
-    var id: Int = 0
-    @SerializedName("name")
-    lateinit var name: String
-
-}
+@Serializable
+data class TriviaCategory(
+    @SerialName("id")
+    val id: Int = 0,
+    @SerialName("name")
+    val name: String = ""
+)

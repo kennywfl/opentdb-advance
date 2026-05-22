@@ -1,12 +1,11 @@
 package com.opentrivia.app.lib.datasource.remote.mapping.response
 
-import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-class ApiTokenResponseMessage : BaseResponseMessage() {
-    @SerializedName("response_code")
-    var responseCode: Int? = null
-    @SerializedName("response_message")
-    var responseMessage: String? = null
-    @SerializedName("token")
-    var token: String? = null
-}
+@Serializable
+data class ApiTokenResponseMessage(
+    @SerialName("response_code") val responseCode: Int? = null,
+    @SerialName("response_message") val responseMessage: String? = null,
+    @SerialName("token") val token: String? = null
+)

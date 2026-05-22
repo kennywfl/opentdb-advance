@@ -9,24 +9,22 @@ import com.opentrivia.app.lib.datasource.remote.DataException
 import com.opentrivia.app.lib.datasource.remote.Kind
 import com.opentrivia.app.lib.datasource.remote.mapping.request.ApiTokenRequestMessage
 import com.opentrivia.app.lib.datasource.remote.mapping.request.ApiTriviaRequestMessage
-import com.opentrivia.app.lib.datasource.remote.mapping.response.ApiCategoryResponseMessage
 import com.opentrivia.app.lib.datasource.remote.mapping.response.ApiTriviaResponseMessage
 import com.opentrivia.app.lib.datasource.remote.service.ApiService
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import javax.inject.Inject
 
 
 class DataManager @Inject constructor(
-    private val apiService: ApiService,
-    private val appSharedPreference: AppSharedPreference
+    val apiService: ApiService,
+    val appSharedPreference: AppSharedPreference
 ) {
 
-    fun getTriviaCategories(): Observable<ApiCategoryResponseMessage> {
-        return apiService.getTriviaCategories()
-    }
+    suspend fun getTriviaCategories() = apiService.getTriviaCategories()
 
-    private fun resetToken(): Observable<String> {
+    private suspend fun resetToken(): String {
         val requestMessage = ApiTokenRequestMessage(
             command = Constants.Api.PARAM_RESET,
             token = appSharedPreference.retrieveToken()
@@ -34,47 +32,44 @@ class DataManager @Inject constructor(
         return getToken(requestMessage)
     }
 
-    private fun requestToken(): Observable<String> {
+    private suspend fun requestToken(): String {
         val request = ApiTokenRequestMessage(
             command = Constants.Api.PARAM_REQUEST
         )
         return getToken(request)
     }
 
-    private fun getToken(requestMessage: ApiTokenRequestMessage): Observable<String> {
-        return apiService.getToken(requestMessage.buildParam())
-            .map { response ->
-                var token = ""
-                response.responseCode?.let { resCode ->
-                    when (resCode) {
-                        0 -> {
-                            response.token?.let {
-                                token = it
-                                appSharedPreference.saveToken(it)
-                            }
-                        }
-                        else -> {
-                            throw DataException(
-                                resultCode = resCode.toString(),
-                                errorMessage = response.responseMessage,
-                                kind = Kind.SERVER
-                            )
-                        }
+    private suspend fun getToken(requestMessage: ApiTokenRequestMessage): String {
+        val response = apiService.getToken(requestMessage.buildParam())
+        response.responseCode?.let { resCode ->
+            when (resCode) {
+                0 -> {
+                    response.token?.let { token ->
+                        appSharedPreference.saveToken(token)
+                        return token
                     }
                 }
-                token
+                else -> {
+                    throw DataException(
+                        resultCode = resCode.toString(),
+                        errorMessage = response.responseMessage,
+                        kind = Kind.SERVER
+                    )
+                }
             }
+        }
+        return ""
     }
 
-    private fun obtainTokenForApi(): Observable<String> {
+    private suspend fun obtainTokenForApi(): String {
         val savedToken = appSharedPreference.retrieveToken()
-        return if (savedToken.isNotBlank()) Observable.just(savedToken) else requestToken()
+        return if (savedToken.isNotBlank()) savedToken else requestToken()
     }
 
-    fun getTriviaWithToken(
+    suspend fun getTriviaWithToken(
         amount: Int? = Constants.PAGING_SIZE,
         category: Int? = null
-    ): Observable<ApiTriviaResponseMessage> {
+    ): ApiTriviaResponseMessage {
         val requestMessage = ApiTriviaRequestMessage()
         amount?.let {
             requestMessage.amount = it.toString()
@@ -82,85 +77,59 @@ class DataManager @Inject constructor(
         category?.let {
             requestMessage.category = it.toString()
         }
-        return obtainTokenForApi()
-            .flatMap {
-                if (it.isNotBlank()) {
-                    requestMessage.token = it
+        val token = obtainTokenForApi()
+        if (token.isNotBlank()) {
+            requestMessage.token = token
+        }
+        val response = apiService.getTrivia(requestMessage.buildParam())
+        return when (response.responseCode) {
+            0 -> response
+            3 -> {
+                val newToken = requestToken()
+                if (newToken.isNotBlank()) {
+                    requestMessage.token = newToken
                 }
                 apiService.getTrivia(requestMessage.buildParam())
             }
-            .flatMap { response ->
-                when (response.responseCode) {
-                    0 -> Observable.just(response)
-                    // API return response code = 3, token is not found
-                    3 -> requestToken()
-                        .flatMap {
-                            if (it.isNotBlank()) {
-                                requestMessage.token = it
-                            }
-                            apiService.getTrivia(requestMessage.buildParam())
-                        }
-                    // API return response code = 4, token has exhausted, need reset
-                    4 -> resetToken()
-                        .flatMap { resetToken ->
-                            if (resetToken.isNotBlank()) {
-                                requestMessage.token = resetToken
-                            }
-                            apiService.getTrivia(requestMessage.buildParam())
-                        }
-                    else -> Observable.error(
-                        DataException(
-                            resultCode = response.responseCode.toString(),
-                            kind = Kind.SERVER
-                        )
-                    )
+            4 -> {
+                val newToken = resetToken()
+                if (newToken.isNotBlank()) {
+                    requestMessage.token = newToken
                 }
+                apiService.getTrivia(requestMessage.buildParam())
             }
+            else -> throw DataException(
+                resultCode = response.responseCode.toString(),
+                kind = Kind.SERVER
+            )
+        }
     }
 
-    fun getCategoriesQuestionCount(): Observable<List<QuestionCount>> {
+    suspend fun getCategoriesQuestionCount(): List<QuestionCount> = coroutineScope {
         val map = SparseArray<QuestionCount>()
-        return getTriviaCategories()
-            .flatMapIterable { it ->
-                it.triviaCategories?.let {
-                    for (triviaCategory in it) {
-                        map.put(triviaCategory.id, QuestionCount(question = triviaCategory.name))
-                    }
+        val categories = getTriviaCategories()
+        for (triviaCategory in categories.triviaCategories) {
+            map.put(triviaCategory.id, QuestionCount(question = triviaCategory.name))
+        }
+        val countResponses = categories.triviaCategories.map { category ->
+            async { apiService.getCategoryCount(category.id) }
+        }.awaitAll()
+        for (response in countResponses) {
+            response.categoryId?.let { id ->
+                map.get(id)?.let { category ->
+                    category.easyCount = response.categoryQuestionCount?.totalEasyQuestionCount ?: 0
+                    category.mediumCount = response.categoryQuestionCount?.totalMediumQuestionCount ?: 0
+                    category.hardCount = response.categoryQuestionCount?.totalHardQuestionCount ?: 0
+                    category.totalCount = response.categoryQuestionCount?.totalQuestionCount ?: 0
                 }
-                it.triviaCategories
             }
-            .flatMap {
-                apiService.getCategoryCount(it.id).subscribeOn(Schedulers.io())
-            }
-            .toList()
-            .toObservable()
-            .flatMap { it ->
-                it.forEach { response ->
-                    response.categoryId?.let {
-                        val questionCount = map.get(it)
-                        questionCount?.let { category ->
-                            category.easyCount = response.categoryQuestionCount?.totalEasyQuestionCount ?: 0
-                            category.mediumCount = response.categoryQuestionCount?.totalMediumQuestionCount ?: 0
-                            category.hardCount = response.categoryQuestionCount?.totalHardQuestionCount ?: 0
-                            category.totalCount = response.categoryQuestionCount?.totalQuestionCount ?: 0
-                        }
-                    }
-                }
-                Observable.just(map)
-            }
-            .flatMap {
-                Observable.just(
-                    it.valueIterator().asSequence().toList()
-                )
-            }
+        }
+        map.valueIterator().asSequence().toList()
     }
 
-    fun getCategoryQuestionCount(category: Int): Observable<Int> {
+    suspend fun getCategoryQuestionCount(category: Int): Int {
         appSharedPreference.removeToken()
-        return apiService.getCategoryCount(category)
-            .map {
-                it.categoryQuestionCount?.totalQuestionCount ?: 0
-            }
+        val response = apiService.getCategoryCount(category)
+        return response.categoryQuestionCount?.totalQuestionCount ?: 0
     }
-
 }

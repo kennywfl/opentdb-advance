@@ -1,10 +1,10 @@
 package com.opentrivia.app.lib.datasource.remote.mapping.response
 
-import com.google.gson.annotations.SerializedName
 import com.opentrivia.app.lib.datasource.remote.mapping.response.model.TriviaCategory
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-
-class ApiCategoryResponseMessage : BaseResponseMessage() {
-    @SerializedName("trivia_categories")
-    var triviaCategories: List<TriviaCategory>? = null
-}
+@Serializable
+data class ApiCategoryResponseMessage(
+    @SerialName("trivia_categories") val triviaCategories: List<TriviaCategory> = emptyList()
+)
