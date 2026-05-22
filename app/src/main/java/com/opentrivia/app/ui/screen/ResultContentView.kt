@@ -1,10 +1,5 @@
-package com.opentrivia.app.dialogfragment
+package com.opentrivia.app.ui.screen
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,64 +18,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.core.text.HtmlCompat
-import androidx.core.util.forEach
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
-import com.opentrivia.advance.R
-import com.opentrivia.app.model.QuizViewModel
-import com.opentrivia.app.ui.theme.AppTheme
 import com.opentrivia.app.lib.datasource.model.Questions
-
-
-class ResultDialogFragment : BaseDialogFragment() {
-
-    private val quizViewModel: QuizViewModel by viewModels(ownerProducer = { requireActivity() })
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NO_FRAME, R.style.NoTitleDialog)
-        populateAnswerCorrectlyFlag()
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                AppTheme {
-                    QuizResultContent(
-                        questions = quizViewModel.questionList,
-                        onCloseClick = { dismiss() }
-                    )
-                }
-            }
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        val window = dialog?.window
-        if (window != null) {
-            val params = window.attributes
-            params.width = WindowManager.LayoutParams.MATCH_PARENT
-            params.height = WindowManager.LayoutParams.MATCH_PARENT
-            window.attributes = params as WindowManager.LayoutParams
-        }
-    }
-
-    private fun populateAnswerCorrectlyFlag() {
-        quizViewModel.answerMap.value?.forEach { key, value ->
-            quizViewModel.questionList[key - 1].answerCorrectly = value
-        }
-    }
-}
+import com.opentrivia.app.ui.theme.Green
+import com.opentrivia.app.ui.theme.Red
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun QuizResultContent(
-    questions: List<com.opentrivia.app.lib.datasource.model.Questions>,
-    onCloseClick: () -> Unit,
+fun ResultContentView(
+    questions: List<Questions>,
+    onClose: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -88,7 +36,7 @@ private fun QuizResultContent(
             TopAppBar(
                 title = { Text("Results") },
                 actions = {
-                    IconButton(onClick = onCloseClick) {
+                    IconButton(onClick = onClose) {
                         Icon(Icons.Filled.Close, contentDescription = "Close")
                     }
                 }
@@ -114,7 +62,7 @@ private fun QuizResultContent(
                         )
                         Text(
                             text = if (question.answerCorrectly) "Correct" else "Incorrect",
-                            color = if (question.answerCorrectly) com.opentrivia.app.ui.theme.Green else com.opentrivia.app.ui.theme.Red,
+                            color = if (question.answerCorrectly) Green else Red,
                             style = MaterialTheme.typography.labelMedium
                         )
                     }

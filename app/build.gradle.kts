@@ -2,14 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.navigation.safeargs.kotlin)
     alias(libs.plugins.kotlin.compose)
 }
 
 android {
     buildFeatures {
         compose = true
-        viewBinding = true
     }
 
     compileSdk = 36
@@ -59,11 +57,10 @@ dependencies {
     implementation(project(":lib"))
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.preference)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.google.material)
+    implementation(libs.bundles.navigation3)
+    implementation(libs.lifecycle.viewmodel.navigation3)
     implementation(platform(libs.compose.bom))
     implementation(libs.bundles.compose)
     implementation(libs.compose.activity)
