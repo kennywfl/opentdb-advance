@@ -6,31 +6,43 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import androidx.core.content.ContextCompat
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import com.opentrivia.advance.R
-import com.opentrivia.advance.databinding.FragmentQuestionsBinding
-import com.opentrivia.app.extension.hide
-import com.opentrivia.app.extension.show
 import com.opentrivia.app.framework.model.QuizViewModel
 import com.opentrivia.app.framework.presenter.QuickQuizPresenter
 import com.opentrivia.app.framework.view.QuickQuizView
 import com.opentrivia.app.lib.Constants
-import java.util.Locale
+import com.opentrivia.app.ui.screen.QuickQuizScreen
+import com.opentrivia.app.ui.theme.AppTheme
 import javax.inject.Inject
 
 
-class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClickListener {
+class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView {
 
     @Inject
     lateinit var presenter: QuickQuizPresenter
     private lateinit var quizViewModel: QuizViewModel
-    private var count = 1
-    private val buttonMap = SparseBooleanArray()
+
+    private var count by mutableIntStateOf(1)
     private val answerMap = SparseBooleanArray()
-    private lateinit var binding: FragmentQuestionsBinding
+
+    private var questionCountText by mutableStateOf("")
+    private var timerText by mutableStateOf("01:00")
+    private var timerColor by mutableStateOf(androidx.compose.ui.graphics.Color.Unspecified)
+    private var questionText by mutableStateOf("")
+    private var difficulty by mutableStateOf("")
+    private var option1 by mutableStateOf("")
+    private var option2 by mutableStateOf("")
+    private var option3 by mutableStateOf<String?>(null)
+    private var option4 by mutableStateOf<String?>(null)
+    private var isMultiple by mutableStateOf(true)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,19 +53,41 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentQuestionsBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    QuickQuizScreen(
+                        questionCount = questionCountText,
+                        timerText = timerText,
+                        timerColor = timerColor,
+                        questionText = questionText,
+                        difficulty = difficulty,
+                        option1 = option1,
+                        option2 = option2,
+                        option3 = option3,
+                        option4 = option4,
+                        isMultiple = isMultiple,
+                        onCloseClick = { dismiss() },
+                        onOptionClick = { id ->
+                            val result = id
+                            answerMap.put(count, result == 1 || result == 2 || result == 3 || result == 4)
+                            if (count >= Constants.QUIZ_SIZE) {
+                                quizViewModel.remainingTime = timerText
+                                quizViewModel.answerMap.postValue(answerMap)
+                                dismiss()
+                            } else {
+                                count++
+                                populateQuestionContent()
+                            }
+                        }
+                    )
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.ivClose.setOnClickListener {
-            dismiss()
-        }
-        binding.cvOption1.setOnClickListener(this)
-        binding.cvOption2.setOnClickListener(this)
-        binding.cvOption3.setOnClickListener(this)
-        binding.cvOption4.setOnClickListener(this)
         populateQuestionContent()
         presenter.startTimer()
     }
@@ -76,27 +110,12 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
     }
 
     override fun onTimeCountDown(remainingTime: Long) {
-        if (remainingTime > 5) {
-            context?.let {
-                binding.tvTimer.setTextColor(ContextCompat.getColor(it, R.color.textPrimary))
-            }
+        timerColor = if (remainingTime > 5) {
+            androidx.compose.ui.graphics.Color.Unspecified
         } else {
-            context?.let {
-                binding.tvTimer.setTextColor(ContextCompat.getColor(it, R.color.red))
-            }
-            if (remainingTime != 0L) {
-                binding.tvTimer.animate()
-                    .setDuration(400)
-                    .alpha(0f)
-                    .withEndAction {
-                        binding.tvTimer.animate()
-                            .alpha(1f)
-                            .setDuration(400)
-                    }
-                    .start()
-            }
+            com.opentrivia.app.ui.theme.Red
         }
-        binding.tvTimer.text = Constants.COUNT_DOWN_TEXT.format(remainingTime)
+        timerText = Constants.COUNT_DOWN_TEXT.format(remainingTime)
     }
 
     override fun onCountDownFinished() {
@@ -107,74 +126,25 @@ class QuickQuizDialogFragment : BaseDialogFragment(), QuickQuizView, View.OnClic
                 answerMap.put(currentSize + i, false)
             }
         }
-        quizViewModel.remainingTime = binding.tvTimer.text.toString()
+        quizViewModel.remainingTime = timerText
         quizViewModel.answerMap.postValue(answerMap)
         dismiss()
     }
 
-    override fun onClick(v: View?) {
-        v?.let {
-            val result = buttonMap[it.id]
-            answerMap.put(count, result)
-            if (count > Constants.QUIZ_SIZE - 1) {
-                quizViewModel.remainingTime = binding.tvTimer.text.toString()
-                quizViewModel.answerMap.postValue(answerMap)
-                dismiss()
-            } else {
-                count++
-                populateQuestionContent()
-            }
-        }
-    }
-
-    private fun updateQuestionCount() {
-        binding.tvQuestionCount.text =
-            getString(R.string.question_count, count, quizViewModel.questionList.size)
-    }
-
     private fun populateQuestionContent() {
-        buttonMap.clear()
-        updateQuestionCount()
-        val (_, question, difficulty, isMultiple, answers) = quizViewModel.questionList[count - 1]
-        binding.tvQuestion.text = HtmlCompat.fromHtml(question, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        constructDifficulty(difficulty)
-        binding.tvOption1.text =
-            HtmlCompat.fromHtml(answers[0].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        buttonMap.put(R.id.cv_option_1, answers[0].second)
-        binding.tvOption2.text =
-            HtmlCompat.fromHtml(answers[1].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
-        buttonMap.put(R.id.cv_option_2, answers[1].second)
-        if (isMultiple) {
-            binding.tvOption3.text =
-                HtmlCompat.fromHtml(answers[2].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            buttonMap.put(R.id.cv_option_3, answers[2].second)
-            binding.cvOption3.show()
-            binding.tvOption4.text =
-                HtmlCompat.fromHtml(answers[3].first, HtmlCompat.FROM_HTML_MODE_LEGACY)
-            buttonMap.put(R.id.cv_option_4, answers[3].second)
-            binding.cvOption4.show()
+        questionCountText = getString(R.string.question_count, count, quizViewModel.questionList.size)
+        val (_, question, diff, multiple, answers) = quizViewModel.questionList[count - 1]
+        questionText = HtmlCompat.fromHtml(question, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+        difficulty = diff.replaceFirstChar { if (it.isLowerCase()) it.uppercase() else it.toString() }
+        isMultiple = multiple
+        option1 = HtmlCompat.fromHtml(answers[0].first, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+        option2 = HtmlCompat.fromHtml(answers[1].first, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+        if (multiple) {
+            option3 = HtmlCompat.fromHtml(answers[2].first, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
+            option4 = HtmlCompat.fromHtml(answers[3].first, HtmlCompat.FROM_HTML_MODE_LEGACY).toString()
         } else {
-            binding.cvOption3.hide()
-            binding.cvOption4.hide()
+            option3 = null
+            option4 = null
         }
     }
-
-    private fun constructDifficulty(difficulty: String) {
-        binding.tvDifficulty.text = difficulty.replaceFirstChar {
-            if (it.isLowerCase()) it.titlecase(
-                Locale.getDefault()
-            ) else it.toString()
-        }
-        binding.tvDifficulty.show()
-        if (Constants.Api.PARAM_EASY == difficulty) {
-            binding.tvDifficulty.setChipBackgroundColorResource(R.color.green)
-        } else if (Constants.Api.PARAM_MEDIUM == difficulty) {
-            binding.tvDifficulty.setChipBackgroundColorResource(R.color.orange)
-        } else if (Constants.Api.PARAM_HARD == difficulty) {
-            binding.tvDifficulty.setChipBackgroundColorResource(R.color.red)
-        } else {
-            binding.tvDifficulty.hide()
-        }
-    }
-
 }

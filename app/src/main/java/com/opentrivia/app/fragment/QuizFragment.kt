@@ -4,18 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.util.valueIterator
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.opentrivia.advance.R
-import com.opentrivia.advance.databinding.FragmentQuizBinding
-import com.opentrivia.app.adapter.SpinnerAdapter
-import com.opentrivia.app.extension.hide
-import com.opentrivia.app.extension.show
 import com.opentrivia.app.framework.model.QuizViewModel
 import com.opentrivia.app.framework.presenter.QuizPresenter
 import com.opentrivia.app.framework.view.QuizView
 import com.opentrivia.app.lib.datasource.model.Questions
+import com.opentrivia.app.ui.screen.QuizScreen
+import com.opentrivia.app.ui.theme.AppTheme
 import javax.inject.Inject
 
 
@@ -23,9 +25,14 @@ class QuizFragment : BaseFragment(), QuizView {
 
     @Inject
     lateinit var presenter: QuizPresenter
-    private lateinit var categoryAdapter: SpinnerAdapter
     private lateinit var quizViewModel: QuizViewModel
-    private lateinit var binding: FragmentQuizBinding
+
+    private var isInputEnabled by mutableStateOf(true)
+    private var isLoading by mutableStateOf(false)
+    private var isResultVisible by mutableStateOf(false)
+    private var resultTime by mutableStateOf("")
+    private var resultCorrectCount by mutableStateOf("")
+    private var categories by mutableStateOf<List<Pair<String, String>>>(emptyList())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,20 +40,16 @@ class QuizFragment : BaseFragment(), QuizView {
             ViewModelProviders.of(this).get(QuizViewModel::class.java)
         } ?: throw Exception("Invalid Activity")
         quizViewModel.answerMap.observe(this) { it ->
-            val correctQuestion = it.valueIterator().asSequence().count {
-                it
-            }
-            binding.cvResult.show()
-            binding.tvTimeTaken.text =
-                getString(R.string.remaining_time, quizViewModel.remainingTime)
-            binding.tvCorrectCount.text =
-                getString(
-                    R.string.correct_answer_count,
-                    correctQuestion,
-                    quizViewModel.questionList.size
-                )
+            val correctQuestion = it.valueIterator().asSequence().count { it }
+            isResultVisible = true
+            isLoading = false
+            resultTime = getString(R.string.remaining_time, quizViewModel.remainingTime)
+            resultCorrectCount = getString(
+                R.string.correct_answer_count,
+                correctQuestion,
+                quizViewModel.questionList.size
+            )
         }
-
     }
 
     override fun onCreateView(
@@ -54,22 +57,41 @@ class QuizFragment : BaseFragment(), QuizView {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentQuizBinding.inflate(inflater, container, false)
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    QuizScreen(
+                        categories = categories,
+                        isInputEnabled = isInputEnabled,
+                        isLoading = isLoading,
+                        isResultVisible = isResultVisible,
+                        resultTime = resultTime,
+                        resultCorrectCount = resultCorrectCount,
+                        onCategorySelected = { index ->
+                            val selected = categories[index]
+                        },
+                        onNextClick = {
+                            isLoading = true
+                            isInputEnabled = false
+                            quizViewModel.clear()
+                            isResultVisible = false
+                            val list = appSp.retrieveCategories()
+                            val categoryId = list.firstOrNull()?.second ?: ""
+                            presenter.getQuestionForQuickQuiz(categoryId)
+                        },
+                        onResultClick = {
+                            findNavController().navigate(R.id.action_quiz_fragment_to_result_dialog)
+                        }
+                    )
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupOptionSpinners()
-        binding.btnNext.setOnClickListener {
-            showLoadingProgress()
-            enableInput(false)
-            quizViewModel.clear()
-            binding.cvResult.hide()
-            presenter.getQuestionForQuickQuiz(binding.spCategory.selectedView.tag as String)
-        }
-        binding.cvResult.setOnClickListener {
-            findNavController().navigate(R.id.action_quiz_fragment_to_result_dialog)
+        categories = appSp.retrieveCategories().toMutableList().apply {
+            add(0, "Default" to "noop")
         }
     }
 
@@ -84,36 +106,9 @@ class QuizFragment : BaseFragment(), QuizView {
     }
 
     override fun onRetrieveQuestionList(questions: MutableList<Questions>) {
-        hideLoadingProgress()
+        isLoading = false
         quizViewModel.questionList = questions
-        enableInput(true)
+        isInputEnabled = true
         findNavController().navigate(R.id.action_quiz_fragment_to_quick_quiz_dialog)
-    }
-
-    private fun initCategorySpinner() {
-        val list = appSp.retrieveCategories()
-        val defaultValue = "Default" to getString(R.string.noop)
-        list.add(0, defaultValue)
-        context?.let {
-            categoryAdapter = SpinnerAdapter(it, list)
-            binding.spCategory.adapter = categoryAdapter
-        }
-    }
-
-    private fun setupOptionSpinners() {
-        initCategorySpinner()
-    }
-
-    private fun enableInput(enable: Boolean) {
-        binding.spCategory.isEnabled = enable
-        binding.btnNext.isEnabled = enable
-    }
-
-    private fun showLoadingProgress() {
-        binding.pbLoading.show()
-    }
-
-    private fun hideLoadingProgress() {
-        binding.pbLoading.hide()
     }
 }

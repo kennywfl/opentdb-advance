@@ -1,5 +1,6 @@
 [versions]
 android-gradle-plugin = "8.13.1"
+compose-bom = "2025.01.01"
 androidx-activity = "1.11.0"
 androidx-appcompat = "1.7.1"
 androidx-cardview = "1.0.0"
@@ -77,8 +78,17 @@ rxjava = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rx-java" }
 rxkotlin = { module = "io.reactivex.rxjava2:rxkotlin", version.ref = "rx-kotlin" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-activity = { group = "androidx.activity", name = "activity-compose" }
+
 [bundles]
 dagger = ["dagger", "dagger-android", "dagger-android-support"]
+compose = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling-preview", "compose-material3"]
 retrofit = ["retrofit", "retrofit-adapter-rxjava2", "retrofit-converter-gson"]
 rx = ["rxjava", "rxandroid", "rxkotlin"]
 
@@ -88,3 +98,4 @@ android-library = { id = "com.android.library", version.ref = "android-gradle-pl
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidx-navigation" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

@@ -5,21 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.util.forEach
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.opentrivia.advance.R
-import com.opentrivia.advance.databinding.FragmentResultBinding
 import com.opentrivia.app.adapter.ResultAdapter
 import com.opentrivia.app.framework.model.QuizViewModel
+import com.opentrivia.app.ui.screen.QuizResultScreen
+import com.opentrivia.app.ui.theme.AppTheme
 
 
 class ResultDialogFragment : BaseDialogFragment() {
 
     private lateinit var quizViewModel: QuizViewModel
-    private lateinit var binding: FragmentResultBinding
+    private lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,18 +33,22 @@ class ResultDialogFragment : BaseDialogFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        binding = FragmentResultBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.ivClose.setOnClickListener {
-            dismiss()
-        }
         val adapter = ResultAdapter(context, quizViewModel.questionList)
-        binding.rvResult.layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-        binding.rvResult.adapter = adapter
+        recyclerView = RecyclerView(requireContext()).apply {
+            layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
+            this.adapter = adapter
+        }
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                AppTheme {
+                    QuizResultScreen(
+                        recyclerView = recyclerView,
+                        onCloseClick = { dismiss() }
+                    )
+                }
+            }
+        }
     }
 
     override fun onStart() {

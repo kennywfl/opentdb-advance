@@ -3,10 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.navigation.safeargs.kotlin)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     buildFeatures {
+        compose = true
         viewBinding = true
     }
 
@@ -66,6 +68,10 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.google.material)
     implementation(libs.rxbinding)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.bundles.compose)
+    implementation(libs.compose.activity)
+    debugImplementation(libs.compose.ui.tooling)
     kapt(libs.dagger.compiler)
     kapt(libs.dagger.android.processor)
     testImplementation(libs.junit)
