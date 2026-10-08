@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.navigation.safeargs.kotlin)
 }
 
@@ -10,14 +10,14 @@ android {
         viewBinding = true
     }
 
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.opentrivia.advance"
         minSdk = 26
-        targetSdk = 36
-        versionCode = 12
-        versionName = "1.1.1"
+        targetSdk = 37
+        versionCode = 14
+        versionName = "1.1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -66,8 +66,8 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.google.material)
     implementation(libs.rxbinding)
-    kapt(libs.dagger.compiler)
-    kapt(libs.dagger.android.processor)
+    ksp(libs.dagger.compiler)
+    ksp(libs.dagger.android.processor)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.androidx.test.espresso.core)

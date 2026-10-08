@@ -28,7 +28,7 @@ There are **no tests** (no test sources exist). No CI is configured.
 | AGP | 8.13.1 |
 | Kotlin | 2.1.20 |
 | Java | 21 (source + target compat) |
-| compileSdk / targetSdk | 36 |
+| compileSdk / targetSdk | 37 |
 | minSdk | 26 |
 
 ## Framework quirks

@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.13.1"
+android-gradle-plugin = "9.4.1"
 androidx-activity = "1.11.0"
 androidx-appcompat = "1.7.1"
 androidx-cardview = "1.0.0"
@@ -24,6 +24,7 @@ google-material = "1.1.0-alpha06"
 google-services = "4.0.1"
 jackson = "2.9.7"
 kotlin = "2.1.20"
+ksp = "2.1.20-1.0.31"
 rx-android = "2.1.0"
 rx-binding = "3.0.0-alpha2"
 rx-java = "2.2.3"
@@ -86,5 +87,5 @@ rx = ["rxjava", "rxandroid", "rxkotlin"]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin" }
 android-library = { id = "com.android.library", version.ref = "android-gradle-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 navigation-safeargs-kotlin = { id = "androidx.navigation.safeargs.kotlin", version.ref = "androidx-navigation" }
